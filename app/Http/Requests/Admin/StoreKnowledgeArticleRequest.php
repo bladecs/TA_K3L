@@ -9,7 +9,7 @@ class StoreKnowledgeArticleRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->isAdmin() === true;
+        return $this->user()?->isAdmin() === true || $this->user()?->isSatgas() === true;
     }
 
     public function rules(): array

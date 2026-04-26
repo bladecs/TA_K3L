@@ -5,9 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Actions\Incidents\CreateIncidentReport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Incident\StoreIncidentReportRequest;
-use App\Models\IncidentCategory;
 use App\Models\IncidentReport;
-use App\Models\Location;
+use App\Support\Reports\ReportFormOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,6 +15,7 @@ class IncidentReportController extends Controller
 {
     public function __construct(
         protected CreateIncidentReport $createIncidentReport,
+        protected ReportFormOptions $reportFormOptions,
     ) {
     }
 
@@ -146,16 +146,7 @@ class IncidentReportController extends Controller
     {
         $this->authorize('create', IncidentReport::class);
 
-        return view('user.incidents.create', [
-            'categories' => IncidentCategory::query()->orderBy('name')->get(),
-            'locations' => Location::query()->where('is_active', true)->orderBy('name')->get(),
-            'severityOptions' => [
-                'low' => 'Rendah',
-                'medium' => 'Sedang',
-                'high' => 'Tinggi',
-                'critical' => 'Kritis',
-            ],
-        ]);
+        return view('user.incidents.create', $this->reportFormOptions->incident());
     }
 
     public function show(IncidentReport $incidentReport): View

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EmergencyContactController;
 use App\Http\Controllers\Admin\EmergencyResponseStepController;
 use App\Http\Controllers\Admin\FirstAidGuideController;
+use App\Http\Controllers\Admin\IncidentReportController as AdminIncidentReportController;
 use App\Http\Controllers\Admin\IncidentCategoryController;
 use App\Http\Controllers\Admin\KnowledgeArticleController;
 use App\Http\Controllers\Admin\KnowledgeCategoryController;
@@ -12,7 +13,10 @@ use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PotentialHazardReportController as AdminPotentialHazardReportController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Satgas\DashboardController as SatgasDashboardController;
+use App\Http\Controllers\Satgas\IncidentReportController as SatgasIncidentReportController;
 use App\Http\Controllers\Satgas\IncidentReviewController;
+use App\Http\Controllers\Satgas\KnowledgeArticleController as SatgasKnowledgeArticleController;
+use App\Http\Controllers\Satgas\PotentialHazardReportController as SatgasPotentialHazardReportController;
 use App\Http\Controllers\Satgas\PotentialHazardReviewController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\EmergencyCenterController;
@@ -71,6 +75,8 @@ Route::middleware(['auth', 'active.user', 'role:mahasiswa'])->prefix('user')->na
 
 Route::middleware(['auth', 'active.user', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('incidents/create', [AdminIncidentReportController::class, 'create'])->name('incidents.create');
+    Route::post('incidents', [AdminIncidentReportController::class, 'store'])->name('incidents.store');
     Route::resource('users', UserManagementController::class)->except(['show', 'destroy']);
     Route::resource('locations', LocationController::class)->except(['show']);
     Route::resource('incident-categories', IncidentCategoryController::class)->except(['show']);
@@ -79,14 +85,19 @@ Route::middleware(['auth', 'active.user', 'role:admin'])->prefix('admin')->name(
     Route::resource('emergency-contacts', EmergencyContactController::class)->except(['show']);
     Route::resource('emergency-response-steps', EmergencyResponseStepController::class)->except(['show']);
     Route::resource('first-aid-guides', FirstAidGuideController::class)->except(['show']);
+    Route::get('hazards/create', [AdminPotentialHazardReportController::class, 'create'])->name('hazards.create');
+    Route::post('hazards', [AdminPotentialHazardReportController::class, 'store'])->name('hazards.store');
     Route::get('hazards', [AdminPotentialHazardReportController::class, 'index'])->name('hazards.index');
     Route::get('hazards/{potentialHazardReport}', [AdminPotentialHazardReportController::class, 'show'])->name('hazards.show');
 });
 
 Route::middleware(['auth', 'active.user', 'role:satgas'])->prefix('satgas')->name('satgas.')->group(function () {
     Route::get('/dashboard', SatgasDashboardController::class)->name('dashboard');
+    Route::resource('knowledge-articles', SatgasKnowledgeArticleController::class)->except(['show']);
 
     Route::prefix('incidents')->name('incidents.')->group(function () {
+        Route::get('/create', [SatgasIncidentReportController::class, 'create'])->name('create');
+        Route::post('/', [SatgasIncidentReportController::class, 'store'])->name('store');
         Route::get('/', [IncidentReviewController::class, 'index'])->name('index');
         Route::get('/{incidentReport}', [IncidentReviewController::class, 'show'])->name('show');
         Route::patch('/{incidentReport}/verify', [IncidentReviewController::class, 'verify'])->name('verify');
@@ -95,6 +106,8 @@ Route::middleware(['auth', 'active.user', 'role:satgas'])->prefix('satgas')->nam
     });
 
     Route::prefix('hazards')->name('hazards.')->group(function () {
+        Route::get('/create', [SatgasPotentialHazardReportController::class, 'create'])->name('create');
+        Route::post('/', [SatgasPotentialHazardReportController::class, 'store'])->name('store');
         Route::get('/', [PotentialHazardReviewController::class, 'index'])->name('index');
         Route::get('/{potentialHazardReport}', [PotentialHazardReviewController::class, 'show'])->name('show');
         Route::patch('/{potentialHazardReport}/status', [PotentialHazardReviewController::class, 'updateStatus'])->name('update-status');

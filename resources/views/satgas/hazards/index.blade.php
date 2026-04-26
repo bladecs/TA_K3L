@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('satgas.layouts.app')
 
 @section('title', 'Review Hazard Report')
+@section('hero_eyebrow', 'Review Hazard')
+@section('hero_title', 'Pantau temuan potensi bahaya')
+@section('hero_description', 'Gunakan dashboard review ini untuk menyaring hazard report masuk, memantau status penanganan, dan membuka detail temuan.')
 
 @section('content')
     @php

@@ -1,4 +1,4 @@
-<div id="admin-floating-navbar" class="fixed inset-x-0 top-0 z-[99] flex w-full justify-center px-4 pt-4 transition-all duration-300 ease-out translate-y-0 opacity-100">
+<div id="satgas-floating-navbar" class="fixed inset-x-0 top-0 z-[99] flex w-full justify-center px-4 pt-4 transition-all duration-300 ease-out translate-y-0 opacity-100">
     <nav
         class="frosted-panel pointer-events-auto flex w-full max-w-[1360px] flex-wrap items-center justify-between gap-4 rounded-[2rem] px-4 py-3 sm:px-5">
         <div class="flex items-center gap-4">
@@ -12,26 +12,26 @@
         </div>
 
         <div class="flex h-fit flex-wrap items-center gap-2 rounded-2xl bg-[var(--blue-low-opacity)] px-2 py-2">
-            <a href="{{ route('admin.dashboard') }}"
-                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('admin.dashboard') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+            <a href="{{ route('satgas.dashboard') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.dashboard') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
                 <span class="material-symbols-outlined text-[var(--primary-color)]">home_app_logo</span>
                 <h6 class="font-bold text-[var(--primary-color)]">Dashboard</h6>
             </a>
 
-            <a href="{{ route('admin.users.index') }}"
-                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('admin.users.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
-                <span class="material-symbols-outlined text-[var(--primary-color)]">manage_accounts</span>
-                <h6 class="font-bold text-[var(--primary-color)]">Kelola Akun</h6>
+            <a href="{{ route('satgas.incidents.index') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.incidents.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                <span class="material-symbols-outlined text-[var(--primary-color)]">fact_check</span>
+                <h6 class="font-bold text-[var(--primary-color)]">Review Insiden</h6>
             </a>
 
-            <a href="{{ route('admin.hazards.index') }}"
-                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('admin.hazards.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
-                <span class="material-symbols-outlined text-[var(--primary-color)]">report</span>
-                <h6 class="font-bold text-[var(--primary-color)]">Hazard</h6>
+            <a href="{{ route('satgas.hazards.index') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.hazards.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                <span class="material-symbols-outlined text-[var(--primary-color)]">warning</span>
+                <h6 class="font-bold text-[var(--primary-color)]">Review Hazard</h6>
             </a>
 
-            <a href="{{ route('admin.knowledge-articles.index') }}"
-                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('admin.knowledge-articles.*', 'admin.knowledge-categories.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+            <a href="{{ route('satgas.knowledge-articles.index') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.knowledge-articles.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
                 <span class="material-symbols-outlined text-[var(--primary-color)]">menu_book</span>
                 <h6 class="font-bold text-[var(--primary-color)]">Knowledge</h6>
             </a>
@@ -46,38 +46,26 @@
 
                 <div class="ambient-card absolute right-0 top-16 w-72 rounded-3xl p-3 shadow-all ring-1 ring-slate-100">
                     <div class="px-3 py-2">
-                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Menu Admin</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Menu Satgas</p>
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <a href="{{ route('admin.incidents.create') }}"
-                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.incidents.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                        <a href="{{ route('satgas.incidents.create') }}"
+                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('satgas.incidents.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">note_add</span>
                             Buat Laporan Insiden
                         </a>
 
-                        <a href="{{ route('admin.hazards.create') }}"
-                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.hazards.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                        <a href="{{ route('satgas.hazards.create') }}"
+                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('satgas.hazards.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">add_alert</span>
                             Buat Hazard Report
                         </a>
 
-                        <a href="{{ route('admin.locations.index') }}"
-                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.locations.*') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
-                            <span class="material-symbols-outlined text-[var(--primary-color)]">pin_drop</span>
-                            Lokasi
-                        </a>
-
-                        <a href="{{ route('admin.incident-categories.index') }}"
-                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.incident-categories.*') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
-                            <span class="material-symbols-outlined text-[var(--primary-color)]">category</span>
-                            Kategori Insiden
-                        </a>
-
-                        <a href="{{ route('admin.emergency-contacts.index') }}"
-                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.emergency-contacts.*', 'admin.emergency-response-steps.*', 'admin.first-aid-guides.*') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
-                            <span class="material-symbols-outlined text-[var(--primary-color)]">emergency_home</span>
-                            Emergency
+                        <a href="{{ route('satgas.knowledge-articles.create') }}"
+                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('satgas.knowledge-articles.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">edit_square</span>
+                            Tambah Materi
                         </a>
 
                         <form action="{{ route('logout') }}" method="POST">
@@ -96,10 +84,10 @@
             <div
                 class="flex h-15 w-auto items-center gap-3 rounded-full bg-[var(--primary-color)] px-3 py-3 shadow-[0_15px_30px_rgba(10,77,179,0.24)]">
                 <span
-                    class="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 font-bold text-white">{{ $initials !== '' ? $initials : 'A' }}</span>
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 font-bold text-white">{{ $initials !== '' ? $initials : 'S' }}</span>
                 <div class="text-left">
                     <h6 class="font-bold text-white">{{ $user->name }}</h6>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">{{ $user->role?->name ?? 'Admin' }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">{{ $user->role?->name ?? 'Satgas' }}</p>
                 </div>
             </div>
         </div>
@@ -109,7 +97,7 @@
 @push('scripts')
     <script>
         (() => {
-            const navbar = document.getElementById('admin-floating-navbar');
+            const navbar = document.getElementById('satgas-floating-navbar');
 
             if (!navbar) {
                 return;

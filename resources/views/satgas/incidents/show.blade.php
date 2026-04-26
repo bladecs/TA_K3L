@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('satgas.layouts.app')
 
 @section('title', 'Review Detail Insiden')
+@section('hero_eyebrow', 'Detail Insiden')
+@section('hero_title', 'Ruang verifikasi dan tindak lanjut insiden')
+@section('hero_description', 'Baca ringkasan kejadian, lakukan verifikasi, ubah status, dan catat tindak lanjut dari satu ruang kerja satgas.')
 
 @section('content')
     @php
@@ -19,7 +22,7 @@
         <div class="space-y-6">
             <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
                 @include('partials.flash')
-                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-700">Review Satgas</p>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--primary-color)]">Review Satgas</p>
                 <h2 class="mt-2 text-3xl font-semibold text-slate-900">{{ $incidentReport->title }}</h2>
                 <p class="mt-3 text-sm leading-7 text-slate-600">
                     Laporan dari <span class="font-semibold text-slate-900">{{ $incidentReport->reporter?->name ?? '-' }}</span>
@@ -80,11 +83,11 @@
                         <div>
                             <label for="verification_note" class="mb-2 block text-sm font-semibold text-slate-800">Catatan verifikasi</label>
                             <textarea id="verification_note" name="verification_note" rows="5"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
                                 placeholder="Tambahkan catatan verifikasi, temuan awal, atau arahan tindak lanjut.">{{ old('verification_note') }}</textarea>
                         </div>
 
-                        <button type="submit" class="inline-flex rounded-full bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800">
+                        <button type="submit" class="inline-flex rounded-full bg-[var(--primary-color)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-deep)]">
                             Verifikasi Laporan
                         </button>
                     </form>
@@ -105,7 +108,7 @@
                         <div>
                             <label for="status" class="mb-2 block text-sm font-semibold text-slate-800">Status berikutnya</label>
                             <select id="status" name="status"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100">
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
                                 @foreach ($statusOptions as $value => $label)
                                     <option value="{{ $value }}">{{ $label }}</option>
                                 @endforeach
@@ -115,7 +118,7 @@
                         <div>
                             <label for="status_note" class="mb-2 block text-sm font-semibold text-slate-800">Catatan perubahan status</label>
                             <textarea id="status_note" name="status_note" rows="4"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
                                 placeholder="Tambahkan catatan tindak lanjut atau alasan perubahan status.">{{ old('status_note') }}</textarea>
                         </div>
 
@@ -158,7 +161,7 @@
                         <div>
                             <label for="action_taken" class="mb-2 block text-sm font-semibold text-slate-800">Aksi tindak lanjut</label>
                             <textarea id="action_taken" name="action_taken" rows="4"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
                                 placeholder="Tuliskan langkah tindak lanjut yang sedang atau akan dilakukan.">{{ old('action_taken') }}</textarea>
                         </div>
 
@@ -166,7 +169,7 @@
                             <div>
                                 <label for="action_owner_id" class="mb-2 block text-sm font-semibold text-slate-800">PIC</label>
                                 <select id="action_owner_id" name="action_owner_id"
-                                    class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100">
+                                    class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
                                     <option value="">Pilih PIC</option>
                                     @foreach ($assignableUsers as $assignableUser)
                                         <option value="{{ $assignableUser->id }}" @selected(old('action_owner_id') == $assignableUser->id)>
@@ -178,21 +181,21 @@
                             <div>
                                 <label for="due_date" class="mb-2 block text-sm font-semibold text-slate-800">Target selesai</label>
                                 <input id="due_date" name="due_date" type="date" value="{{ old('due_date') }}"
-                                    class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100">
+                                    class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
                             </div>
                         </div>
 
                         <div>
                             <label for="follow_up_status" class="mb-2 block text-sm font-semibold text-slate-800">Status tindak lanjut</label>
                             <select id="follow_up_status" name="status"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100">
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
                                 @foreach ($followUpStatusOptions as $value => $label)
                                     <option value="{{ $value }}" @selected(old('status') === $value)>{{ $label }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <button type="submit" class="inline-flex rounded-full bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800">
+                        <button type="submit" class="inline-flex rounded-full bg-[var(--primary-color)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-deep)]">
                             Tambah Tindak Lanjut
                         </button>
                     </form>
@@ -225,7 +228,7 @@
                     @forelse ($incidentReport->attachments as $attachment)
                         <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-sm text-slate-700">
                             <span class="font-medium">{{ $attachment->file_name }}</span>
-                            <span class="material-symbols-outlined text-cyan-700">attach_file</span>
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">attach_file</span>
                         </div>
                     @empty
                         <p class="text-sm text-slate-500">Tidak ada lampiran pada laporan ini.</p>

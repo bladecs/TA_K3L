@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('satgas.layouts.app')
 
 @section('title', 'Detail Hazard Report')
+@section('hero_eyebrow', 'Detail Hazard')
+@section('hero_title', 'Ruang review dan penanganan hazard')
+@section('hero_description', 'Periksa detail temuan, ubah status penanganan, dan dokumentasikan respons satgas pada hazard report yang masuk.')
 
 @section('content')
     @php
@@ -16,7 +19,7 @@
         <div class="space-y-6">
             <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
                 @include('partials.flash')
-                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-700">Review Hazard</p>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--primary-color)]">Review Hazard</p>
                 <h2 class="mt-2 text-3xl font-semibold text-slate-900">{{ $hazardReport->title }}</h2>
                 <p class="mt-3 text-sm leading-7 text-slate-600">
                     Laporan dari <span class="font-semibold text-slate-900">{{ $hazardReport->reporter?->name ?? '-' }}</span>
@@ -73,7 +76,7 @@
                         <div>
                             <label for="status" class="mb-2 block text-sm font-semibold text-slate-800">Status berikutnya</label>
                             <select id="status" name="status"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100">
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
                                 @foreach ($statusOptions as $value => $label)
                                     <option value="{{ $value }}">{{ $label }}</option>
                                 @endforeach
@@ -83,11 +86,11 @@
                         <div>
                             <label for="response_note" class="mb-2 block text-sm font-semibold text-slate-800">Catatan respons</label>
                             <textarea id="response_note" name="response_note" rows="5"
-                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-cyan-600 focus:ring-4 focus:ring-cyan-100"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
                                 placeholder="Jelaskan respons atau tindakan penanganan hazard.">{{ old('response_note') }}</textarea>
                         </div>
 
-                        <button type="submit" class="inline-flex rounded-full bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800">
+                        <button type="submit" class="inline-flex rounded-full bg-[var(--primary-color)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-deep)]">
                             Simpan Status
                         </button>
                     </form>
@@ -124,7 +127,7 @@
                     @forelse ($hazardReport->attachments as $attachment)
                         <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 text-sm text-slate-700">
                             <span class="font-medium">{{ $attachment->file_name }}</span>
-                            <span class="material-symbols-outlined text-cyan-700">attach_file</span>
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">attach_file</span>
                         </div>
                     @empty
                         <p class="text-sm text-slate-500">Tidak ada lampiran pada hazard report ini.</p>

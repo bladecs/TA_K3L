@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('satgas.layouts.app')
 
 @section('title', 'Review Laporan Insiden')
+@section('hero_eyebrow', 'Review Satgas')
+@section('hero_title', 'Pantau dan verifikasi laporan insiden')
+@section('hero_description', 'Tinjau laporan masuk, saring prioritas, dan buka detail untuk memproses verifikasi serta tindak lanjut operasional.')
 
 @section('content')
     @php
