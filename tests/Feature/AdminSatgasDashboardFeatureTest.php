@@ -89,7 +89,7 @@ class AdminSatgasDashboardFeatureTest extends TestCase
             ->assertOk()
             ->assertSeeText('Materi K3')
             ->assertSeeText('Hazard Report')
-            ->assertSeeText('Kontak Darurat')
+            ->assertSeeText('Emergency Center')
             ->assertSeeText('Konten pembelajaran yang sudah dipublikasikan.')
             ->assertSeeText('Hazard Terkini')
             ->assertSeeText('Lantai licin')
@@ -128,8 +128,9 @@ class AdminSatgasDashboardFeatureTest extends TestCase
         $this->actingAs($satgas)
             ->get(route('satgas.dashboard'))
             ->assertOk()
-            ->assertSeeText('Tindakan Selesai')
+            ->assertSeeText('Penyelesaian laporan insiden')
             ->assertSeeText('Perlu evakuasi area')
-            ->assertSeeText('laporan sudah berada di tahap tindakan selesai', false);
+            ->assertSeeText('Rekomendasi tindak lanjut Satgas')
+            ->assertSeeText('Penanganan yang perlu perhatian');
     }
 }

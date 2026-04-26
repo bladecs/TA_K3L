@@ -29,6 +29,17 @@ class AdminKnowledgeArticleFeatureTest extends TestCase
                 'content' => 'Isi lengkap panduan inspeksi harian.',
                 'reading_time' => '6 menit',
                 'status' => 'published',
+                'sections' => [
+                    [
+                        'id' => 'section-1',
+                        'title' => 'Pemeriksaan awal',
+                        'body' => 'Isi lengkap panduan inspeksi harian.',
+                        'list_style' => 'paragraph',
+                        'media_type' => 'none',
+                        'media_url' => null,
+                        'caption' => null,
+                    ],
+                ],
             ])
             ->assertRedirect(route('admin.knowledge-articles.index'))
             ->assertSessionHas('status', 'Materi knowledge berhasil ditambahkan.');
@@ -67,6 +78,17 @@ class AdminKnowledgeArticleFeatureTest extends TestCase
                 'content' => 'Isi final materi pelaporan.',
                 'reading_time' => '4 menit',
                 'status' => 'published',
+                'sections' => [
+                    [
+                        'id' => 'section-1',
+                        'title' => 'Alur pelaporan final',
+                        'body' => 'Isi final materi pelaporan.',
+                        'list_style' => 'paragraph',
+                        'media_type' => 'none',
+                        'media_url' => null,
+                        'caption' => null,
+                    ],
+                ],
             ])
             ->assertRedirect(route('admin.knowledge-articles.index'))
             ->assertSessionHas('status', 'Materi knowledge berhasil diperbarui.');

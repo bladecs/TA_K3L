@@ -92,9 +92,11 @@ class AuthorizationFeatureTest extends TestCase
     {
         $this->instance(SatgasDashboardData::class, new class extends SatgasDashboardData
         {
-            public function build(): array
+            public function build(string $period = '180'): array
             {
                 return [
+                    'period' => $period,
+                    'periodLabel' => '6 bulan terakhir',
                     'stats' => [
                         'submitted_incidents' => 0,
                         'verified_incidents' => 0,
@@ -102,8 +104,47 @@ class AuthorizationFeatureTest extends TestCase
                         'resolved_incidents' => 0,
                         'closed_incidents' => 0,
                         'critical_incidents' => 0,
+                        'total_hazards' => 0,
                     ],
                     'priorityReports' => collect(),
+                    'incidentStatusSummary' => [
+                        'completed' => 0,
+                        'in_progress' => 0,
+                        'pending' => 0,
+                    ],
+                    'hazardStatusSummary' => [
+                        'completed' => 0,
+                        'in_progress' => 0,
+                        'pending' => 0,
+                    ],
+                    'severityBreakdown' => collect([
+                        ['key' => 'low', 'label' => 'LOW', 'count' => 0],
+                        ['key' => 'medium', 'label' => 'MEDIUM', 'count' => 0],
+                        ['key' => 'high', 'label' => 'HIGH', 'count' => 0],
+                        ['key' => 'critical', 'label' => 'CRITICAL', 'count' => 0],
+                    ]),
+                    'hazardTypeBreakdown' => collect([
+                        ['key' => 'lingkungan', 'label' => 'Lingkungan', 'count' => 0],
+                        ['key' => 'peralatan', 'label' => 'Peralatan', 'count' => 0],
+                        ['key' => 'listrik', 'label' => 'Listrik', 'count' => 0],
+                        ['key' => 'zat-kimia', 'label' => 'Zat Kimia', 'count' => 0],
+                    ]),
+                    'monthlyTrend' => collect([
+                        ['label' => 'Apr 2026', 'incidents' => 0, 'hazards' => 0],
+                    ]),
+                    'locationInsights' => collect(),
+                    'sourceBreakdown' => [
+                        'incidents' => ['user' => 0, 'internal' => 0],
+                        'hazards' => ['user' => 0, 'internal' => 0],
+                    ],
+                    'recommendations' => collect([
+                        [
+                            'title' => 'Belum ada pola dominan',
+                            'description' => 'Data pada periode ini masih minim.',
+                            'icon' => 'insights',
+                            'tone' => 'text-slate-700 bg-slate-100',
+                        ],
+                    ]),
                     'workloadSummary' => [
                         'needs_review' => 0,
                         'needs_field_follow_up' => 0,
