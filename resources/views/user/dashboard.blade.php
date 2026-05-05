@@ -56,11 +56,12 @@
     </header>
 
     <main class="w-full bg-[#f6f8fc]">
-        <section class="mx-auto grid w-full max-w-[1360px] gap-5 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-10">
+        <section class="mx-auto grid w-full max-w-[1360px] gap-5 px-4 py-12 sm:px-6 lg:grid-cols-5 lg:px-10">
             @foreach ([
                 ['route' => route('user.emergency.index'), 'icon' => 'emergency_home', 'title' => 'Pusat Darurat', 'color' => 'bg-[var(--red)]'],
                 ['route' => route('user.incidents.create'), 'icon' => 'contract_edit', 'title' => 'Form Insiden', 'color' => 'bg-[var(--primary-color)]'],
                 ['route' => route('user.hazards.create'), 'icon' => 'warning', 'title' => 'Potensi Bahaya', 'color' => 'bg-[var(--yellow)]'],
+                ['route' => route('user.hazards.map'), 'icon' => 'map', 'title' => 'Peta Hazard', 'color' => 'bg-[#0f766e]'],
                 ['route' => route('user.knowledge.index'), 'icon' => 'book_5', 'title' => 'Materi K3', 'color' => 'bg-[var(--green)]'],
             ] as $action)
                 <a href="{{ $action['route'] }}" class="{{ $action['color'] }} flex min-h-32 items-center gap-4 rounded-[1.4rem] p-5 text-white shadow-[0_16px_36px_rgba(15,23,42,0.12)] transition hover:-translate-y-1">

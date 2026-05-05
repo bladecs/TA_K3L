@@ -20,6 +20,14 @@ class PotentialHazardReport extends Model
         'hazard_type',
         'title',
         'specific_location',
+        'latitude',
+        'longitude',
+        'risk_level',
+        'mapped_by',
+        'mapped_at',
+        'map_source',
+        'floorplan_x',
+        'floorplan_y',
         'notes',
         'response_note',
         'status',
@@ -34,6 +42,11 @@ class PotentialHazardReport extends Model
             'submitted_at' => 'datetime',
             'reviewed_at' => 'datetime',
             'resolved_at' => 'datetime',
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
+            'mapped_at' => 'datetime',
+            'floorplan_x' => 'decimal:3',
+            'floorplan_y' => 'decimal:3',
         ];
     }
 
@@ -50,6 +63,11 @@ class PotentialHazardReport extends Model
     public function resolver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'resolved_by');
+    }
+
+    public function mapper(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'mapped_by');
     }
 
     public function location(): BelongsTo

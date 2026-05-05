@@ -1,6 +1,6 @@
 # SIAGA POLMAN K3L
 
-Sistem informasi K3L kampus untuk pelaporan insiden, pelaporan potensi bahaya, edukasi K3L, pusat darurat, dan tindak lanjut laporan oleh Satgas.
+Sistem informasi K3L kampus untuk pelaporan insiden, pelaporan potensi bahaya, pemetaan GIS area rawan, edukasi K3L, pusat darurat, dan tindak lanjut laporan oleh Satgas.
 
 Project ini dibangun dengan Laravel 12, PHP 8.4, Blade, Tailwind CSS, Vite, dan Pest.
 
@@ -8,8 +8,8 @@ Project ini dibangun dengan Laravel 12, PHP 8.4, Blade, Tailwind CSS, Vite, dan 
 
 SIAGA POLMAN K3L membagi alur kerja menjadi tiga area:
 
-- `Portal Publik`: halaman informasi umum, knowledge center, pusat darurat, form laporan insiden, form laporan hazard, dan cek status laporan. Bagian ini tidak membutuhkan login.
-- `Satgas`: memverifikasi laporan, menentukan klasifikasi insiden, menindaklanjuti hazard/insiden, mengelola artikel knowledge, dan mengubah status laporan.
+- `Portal Publik`: halaman informasi umum, knowledge center, pusat darurat, form laporan insiden, form laporan hazard, peta GIS area rawan, dan cek status laporan. Bagian ini tidak membutuhkan login kecuali riwayat laporan pribadi.
+- `Satgas`: memverifikasi laporan, menentukan klasifikasi insiden, menindaklanjuti hazard/insiden, menambahkan titik area rawan di GIS, mengelola artikel knowledge, dan mengubah status laporan.
 - `Admin`: mengelola akun, konten emergency center, dan memantau hazard secara read-only. Admin tidak mengelola teori/knowledge, insiden, kategori insiden, lokasi, atau lokasi hazard.
 
 ## Fitur Utama
@@ -24,6 +24,7 @@ SIAGA POLMAN K3L membagi alur kerja menjadi tiga area:
 - Knowledge center untuk materi K3L yang sudah published.
 - Emergency center berisi kontak darurat, langkah tanggap darurat, dan panduan P3K.
 - Voice to text pada detail kejadian insiden.
+- Peta GIS area rawan kampus pada `GET /user/hazard-map`, termasuk titik dari map satelit dan denah kampus.
 
 ### Satgas
 
@@ -35,6 +36,11 @@ SIAGA POLMAN K3L membagi alur kerja menjadi tiga area:
 - Update status insiden sampai `closed`.
 - Tambah tindak lanjut insiden.
 - Update status hazard.
+- Peta GIS Satgas pada `GET /satgas/hazards/map`.
+- Tambah titik area rawan langsung dari peta GIS, tanpa harus menunggu laporan hazard.
+- Pilih titik dari map satelit atau foto denah kampus Polman.
+- Simpan level risiko, kategori hazard, dan catatan area rawan.
+- Pinpoint laporan hazard dari detail laporan bila titik tersebut berasal dari laporan masuk.
 - Buat laporan internal Satgas.
 - Kelola artikel knowledge.
 
@@ -69,7 +75,41 @@ Field yang tidak diisi oleh pelapor publik karena menjadi wewenang Satgas:
 1. Pelapor publik mengisi form hazard dengan nama, email, WhatsApp, tipe hazard, lokasi, detail lokasi, dan catatan.
 2. Sistem mengirim notifikasi WhatsApp ke Satgas.
 3. Satgas meninjau hazard dan mengubah status ke `reviewed` atau `resolved`.
-4. Admin hanya memantau hazard dari dashboard admin.
+4. Satgas dapat memberi pinpoint GIS pada laporan hazard dari halaman detail laporan.
+5. Admin hanya memantau hazard dari dashboard admin.
+
+## Alur GIS Area Rawan
+
+Fitur GIS dipakai Satgas untuk menandai area bahaya atau rawan di lingkungan kampus. Titik GIS tidak harus berasal dari laporan hazard publik; Satgas bisa membuat titik mandiri berdasarkan inspeksi lapangan, temuan rutin, atau pemetaan area yang perlu diwaspadai.
+
+### Tambah Titik Mandiri
+
+1. Login sebagai Satgas.
+2. Buka `GET /satgas/hazards/map`.
+3. Isi panel **Tambah Titik Area Rawan**:
+   - nama titik rawan
+   - kategori hazard, opsional
+   - level risiko: `rendah`, `sedang`, `tinggi`, atau `kritis`
+   - catatan singkat
+4. Klik **Pilih Titik Satelit** lalu klik lokasi di map satelit, atau klik **Pilih Titik Denah** lalu klik lokasi di denah kampus.
+5. Klik **Simpan Titik**.
+6. Titik tersimpan di tabel `hazard_map_points` dan tampil untuk Satgas maupun user umum.
+
+### Pinpoint Laporan Hazard
+
+1. Login sebagai Satgas.
+2. Buka `GET /satgas/hazards`.
+3. Klik **Tinjau** pada laporan hazard.
+4. Pada bagian **Pinpoint GIS Hazard**, pilih titik di map satelit atau denah kampus.
+5. Klik **Simpan Pinpoint**.
+6. Koordinat tersimpan di `potential_hazard_reports`.
+
+### Sumber Peta
+
+- Map satelit memakai Leaflet dan Esri World Imagery, sehingga tidak membutuhkan API key.
+- Denah kampus memakai asset lokal `public/img/campus-denah/20260430_144208.jpg`.
+- Titik satelit menyimpan `latitude` dan `longitude`.
+- Titik denah menyimpan `floorplan_x` dan `floorplan_y`, yaitu koordinat relatif pada gambar denah.
 
 ## WhatsApp Notification
 
@@ -188,7 +228,10 @@ pm.test('Status web valid', function () {
 - `GET /user/emergency-center`
 - `GET /user/knowledge-center`
 - `GET /user/knowledge-center/module/{slug}`
+- `GET /user/hazard-map`
+- `GET /user/hazard-reports`
 - `GET|POST /user/hazard-reports/create`
+- `GET /user/hazard-reports/{potentialHazardReport}`
 - `GET|POST /user/incidents/create`
 - `GET /user/incidents/status`
 - `GET /user/incidents/{incidentReport}`
@@ -217,7 +260,10 @@ pm.test('Status web valid', function () {
 - `POST /satgas/incidents/{incidentReport}/follow-ups`
 - `GET|POST /satgas/hazards`
 - `GET /satgas/hazards/create`
+- `GET /satgas/hazards/map`
+- `POST /satgas/hazards/map-points`
 - `GET /satgas/hazards/{potentialHazardReport}`
+- `PATCH /satgas/hazards/{potentialHazardReport}/pinpoint`
 - `PATCH /satgas/hazards/{potentialHazardReport}/status`
 - CRUD satgas knowledge articles
 
@@ -232,8 +278,9 @@ CI menjalankan:
 - Composer install dan validasi aplikasi Laravel.
 - Migrasi dan seeder dengan SQLite in-memory.
 - Compile route dan Blade template.
+- Test fitur Satgas Hazard/GIS.
 - Build frontend Vite.
-- Validasi file CSV testcase Postman.
+- Validasi file CSV testcase Postman dan keberadaan asset denah GIS.
 
 ## Command Verifikasi Lokal
 
@@ -241,6 +288,7 @@ CI menjalankan:
 php artisan migrate
 php artisan route:list --except-vendor
 php artisan view:cache
+php artisan test tests/Feature/SatgasPotentialHazardReviewFeatureTest.php
 npm run build
 ```
 
@@ -253,6 +301,7 @@ Automated test lama mungkin perlu disesuaikan ulang dengan perubahan portal publ
 - `app/Services`: integrasi eksternal seperti Fonnte WhatsApp.
 - `app/Support`: helper dashboard dan notifikasi.
 - `resources/views`: Blade view user, satgas, admin, dan partial.
+- `public/img/campus-denah`: asset denah kampus untuk layer GIS berbasis gambar.
 - `routes/web.php`: definisi route utama.
 - `database/migrations`: struktur database.
 - `database/seeders`: role, reference data, emergency center, knowledge, dan akun default.

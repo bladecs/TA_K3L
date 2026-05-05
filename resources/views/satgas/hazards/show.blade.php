@@ -5,6 +5,10 @@
 @section('hero_title', 'Ruang review dan penanganan hazard')
 @section('hero_description', 'Periksa detail temuan, ubah status penanganan, dan dokumentasikan respons satgas pada hazard report yang masuk.')
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+@endpush
+
 @section('content')
     @php
         $statusBadge = match ($hazardReport->status) {
@@ -66,6 +70,123 @@
         </div>
 
         <div class="space-y-6">
+            <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">Pinpoint GIS Hazard</h3>
+                        <p class="mt-2 text-sm leading-7 text-slate-600">
+                            Klik area pada peta satelit untuk menentukan titik rawan yang akan terlihat oleh pengguna umum.
+                        </p>
+                    </div>
+                    <a href="{{ route('satgas.hazards.map') }}" class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+                        <span class="material-symbols-outlined text-[20px]">map</span>
+                        Peta GIS
+                    </a>
+                </div>
+
+                <form action="{{ route('satgas.hazards.update-pinpoint', $hazardReport) }}" method="POST" class="mt-6 space-y-4">
+                    @csrf
+                    @method('PATCH')
+                    <input id="hazard-map-source" name="map_source" type="hidden" value="{{ old('map_source', $hazardReport->map_source ?? 'satellite') }}">
+
+                    <div class="grid gap-3 rounded-[1.25rem] bg-slate-50 p-3 sm:grid-cols-2">
+                        <button id="satellite-pick-button" type="button"
+                            class="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[var(--primary-color)] px-4 py-3 text-sm font-bold text-white transition hover:bg-[var(--primary-deep)]">
+                            <span class="material-symbols-outlined text-[20px]">add_location_alt</span>
+                            <span id="satellite-pick-label">Pilih Titik Satelit</span>
+                        </button>
+                        <button id="floorplan-pick-button" type="button"
+                            class="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[var(--primary-color)] px-4 py-3 text-sm font-bold text-white transition hover:bg-[var(--primary-deep)]">
+                            <span class="material-symbols-outlined text-[20px]">add_location_alt</span>
+                            <span id="floorplan-pick-label">Pilih Titik Denah</span>
+                        </button>
+                    </div>
+
+                    <div class="grid gap-4 xl:grid-cols-2">
+                        <div class="overflow-hidden rounded-[1.5rem] ring-1 ring-slate-200">
+                            <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">Map Satelit</p>
+                                    <p id="satellite-mode-help" class="text-xs text-slate-500">Aktifkan mode titik, lalu klik lokasi hazard.</p>
+                                </div>
+                                <span id="satellite-selected-badge" class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase text-slate-600">GPS</span>
+                            </div>
+                            <div id="hazard-pinpoint-map" class="h-[420px] w-full"></div>
+                        </div>
+
+                        <div class="overflow-hidden rounded-[1.5rem] ring-1 ring-slate-200">
+                            <div class="flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-3">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">Denah Kampus</p>
+                                    <p id="floorplan-mode-help" class="text-xs text-slate-500">Aktifkan mode titik, lalu klik area pada denah.</p>
+                                </div>
+                                <span id="floorplan-selected-badge" class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase text-slate-600">Denah</span>
+                            </div>
+                            <div id="hazard-floorplan-map" class="h-[420px] w-full bg-slate-100"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-800">Latitude</span>
+                            <input id="hazard-latitude" name="latitude" type="text" value="{{ old('latitude', $hazardReport->latitude) }}"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                            @error('latitude')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-800">Longitude</span>
+                            <input id="hazard-longitude" name="longitude" type="text" value="{{ old('longitude', $hazardReport->longitude) }}"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                            @error('longitude')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-800">Posisi X Denah</span>
+                            <input id="hazard-floorplan-x" name="floorplan_x" type="text" value="{{ old('floorplan_x', $hazardReport->floorplan_x) }}"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                            @error('floorplan_x')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-800">Posisi Y Denah</span>
+                            <input id="hazard-floorplan-y" name="floorplan_y" type="text" value="{{ old('floorplan_y', $hazardReport->floorplan_y) }}"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                            @error('floorplan_y')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-800">Level risiko</span>
+                            <select name="risk_level"
+                                class="w-full rounded-3xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                                @foreach (['rendah' => 'Rendah', 'sedang' => 'Sedang', 'tinggi' => 'Tinggi', 'kritis' => 'Kritis'] as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('risk_level', $hazardReport->risk_level ?? 'sedang') === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('risk_level')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+                        </label>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-600">
+                        Terakhir dipetakan oleh {{ $hazardReport->mapper?->name ?? '-' }} pada {{ optional($hazardReport->mapped_at)->format('d M Y H:i') ?? '-' }}.
+                    </div>
+
+                    <button type="submit" class="inline-flex rounded-full bg-[var(--primary-color)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--primary-deep)]">
+                        Simpan Pinpoint
+                    </button>
+                </form>
+            </div>
+
             <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
                 <h3 class="text-lg font-semibold text-slate-900">Update Status Hazard</h3>
                 @if (! empty($statusOptions))
@@ -137,3 +258,168 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (() => {
+            const mapElement = document.getElementById('hazard-pinpoint-map');
+            const floorplanElement = document.getElementById('hazard-floorplan-map');
+            const mapSourceInput = document.getElementById('hazard-map-source');
+            const latitudeInput = document.getElementById('hazard-latitude');
+            const longitudeInput = document.getElementById('hazard-longitude');
+            const floorplanXInput = document.getElementById('hazard-floorplan-x');
+            const floorplanYInput = document.getElementById('hazard-floorplan-y');
+            const satelliteBadge = document.getElementById('satellite-selected-badge');
+            const floorplanBadge = document.getElementById('floorplan-selected-badge');
+            const satellitePickButton = document.getElementById('satellite-pick-button');
+            const floorplanPickButton = document.getElementById('floorplan-pick-button');
+            const satellitePickLabel = document.getElementById('satellite-pick-label');
+            const floorplanPickLabel = document.getElementById('floorplan-pick-label');
+            const satelliteModeHelp = document.getElementById('satellite-mode-help');
+            const floorplanModeHelp = document.getElementById('floorplan-mode-help');
+
+            if (!mapElement || !floorplanElement || !mapSourceInput || !latitudeInput || !longitudeInput || !floorplanXInput || !floorplanYInput || !satellitePickButton || !floorplanPickButton || !satellitePickLabel || !floorplanPickLabel || typeof L === 'undefined') {
+                return;
+            }
+
+            let activePicker = null;
+
+            const pointIcon = L.divIcon({
+                className: '',
+                html: '<span style="display:flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:9999px;background:#d93f33;border:4px solid white;box-shadow:0 12px 26px rgba(15,23,42,.38);color:white;font-size:18px;font-weight:800;">!</span>',
+                iconSize: [34, 34],
+                iconAnchor: [17, 17],
+            });
+
+            const setSource = (source) => {
+                mapSourceInput.value = source;
+                satelliteBadge.className = source === 'satellite'
+                    ? 'rounded-full bg-[var(--primary-color)] px-3 py-1 text-[11px] font-bold uppercase text-white'
+                    : 'rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase text-slate-600';
+                floorplanBadge.className = source === 'floorplan'
+                    ? 'rounded-full bg-[var(--primary-color)] px-3 py-1 text-[11px] font-bold uppercase text-white'
+                    : 'rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold uppercase text-slate-600';
+            };
+
+            const setPickingMode = (source) => {
+                activePicker = activePicker === source ? null : source;
+
+                const satelliteActive = activePicker === 'satellite';
+                const floorplanActive = activePicker === 'floorplan';
+
+                satellitePickButton.className = satelliteActive
+                    ? 'inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-rose-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-rose-700'
+                    : 'inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[var(--primary-color)] px-4 py-3 text-sm font-bold text-white transition hover:bg-[var(--primary-deep)]';
+                floorplanPickButton.className = floorplanActive
+                    ? 'inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-rose-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-rose-700'
+                    : 'inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[var(--primary-color)] px-4 py-3 text-sm font-bold text-white transition hover:bg-[var(--primary-deep)]';
+
+                satellitePickLabel.textContent = satelliteActive ? 'Klik Titik di Satelit' : 'Pilih Titik Satelit';
+                floorplanPickLabel.textContent = floorplanActive ? 'Klik Titik di Denah' : 'Pilih Titik Denah';
+
+                satelliteModeHelp.textContent = satelliteActive
+                    ? 'Klik sekali pada map untuk menaruh titik. Drag marker jika perlu koreksi.'
+                    : 'Aktifkan mode titik, lalu klik lokasi hazard.';
+                floorplanModeHelp.textContent = floorplanActive
+                    ? 'Klik sekali pada denah untuk menaruh titik. Drag marker jika perlu koreksi.'
+                    : 'Aktifkan mode titik, lalu klik area pada denah.';
+
+                [map, floorplanMap].filter(Boolean).forEach((leafletMap) => {
+                    if (activePicker) {
+                        leafletMap.dragging.disable();
+                        leafletMap.touchZoom.disable();
+                        leafletMap.doubleClickZoom.disable();
+                        leafletMap.scrollWheelZoom.disable();
+                        leafletMap.boxZoom.disable();
+                        leafletMap.keyboard.disable();
+                        leafletMap.getContainer().style.cursor = 'crosshair';
+                    } else {
+                        leafletMap.dragging.enable();
+                        leafletMap.touchZoom.enable();
+                        leafletMap.doubleClickZoom.enable();
+                        leafletMap.scrollWheelZoom.enable();
+                        leafletMap.boxZoom.enable();
+                        leafletMap.keyboard.enable();
+                        leafletMap.getContainer().style.cursor = '';
+                    }
+                });
+            };
+
+            const campusCenter = [-6.8761, 107.62063];
+            const savedPoint = [
+                Number(latitudeInput.value || campusCenter[0]),
+                Number(longitudeInput.value || campusCenter[1]),
+            ];
+            const map = L.map(mapElement).setView(savedPoint, latitudeInput.value && longitudeInput.value ? 19 : 18);
+
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri',
+                maxZoom: 20,
+            }).addTo(map);
+
+            L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Labels &copy; Esri',
+                maxZoom: 20,
+            }).addTo(map);
+
+            const marker = L.marker(savedPoint, { draggable: true, icon: pointIcon }).addTo(map);
+
+            const syncInputs = (latlng) => {
+                setSource('satellite');
+                latitudeInput.value = latlng.lat.toFixed(7);
+                longitudeInput.value = latlng.lng.toFixed(7);
+            };
+
+            marker.on('dragend', () => syncInputs(marker.getLatLng()));
+            map.on('click', (event) => {
+                if (activePicker !== 'satellite') {
+                    return;
+                }
+
+                marker.setLatLng(event.latlng);
+                syncInputs(event.latlng);
+                setPickingMode('satellite');
+            });
+
+            const floorplanWidth = 4080;
+            const floorplanHeight = 3060;
+            const floorplanBounds = [[0, 0], [floorplanHeight, floorplanWidth]];
+            const floorplanMap = L.map(floorplanElement, {
+                crs: L.CRS.Simple,
+                minZoom: -2,
+                maxZoom: 2,
+                zoomSnap: 0.25,
+            });
+            L.imageOverlay('{{ asset('img/campus-denah/20260430_144208.jpg') }}', floorplanBounds).addTo(floorplanMap);
+            floorplanMap.fitBounds(floorplanBounds);
+
+            const savedFloorplanPoint = [
+                Number(floorplanYInput.value || floorplanHeight / 2),
+                Number(floorplanXInput.value || floorplanWidth / 2),
+            ];
+            const floorplanMarker = L.marker(savedFloorplanPoint, { draggable: true, icon: pointIcon }).addTo(floorplanMap);
+
+            const syncFloorplanInputs = (latlng) => {
+                setSource('floorplan');
+                floorplanXInput.value = latlng.lng.toFixed(3);
+                floorplanYInput.value = latlng.lat.toFixed(3);
+            };
+
+            floorplanMarker.on('dragend', () => syncFloorplanInputs(floorplanMarker.getLatLng()));
+            floorplanMap.on('click', (event) => {
+                if (activePicker !== 'floorplan') {
+                    return;
+                }
+
+                floorplanMarker.setLatLng(event.latlng);
+                syncFloorplanInputs(event.latlng);
+                setPickingMode('floorplan');
+            });
+
+            satellitePickButton.addEventListener('click', () => setPickingMode('satellite'));
+            floorplanPickButton.addEventListener('click', () => setPickingMode('floorplan'));
+            setSource(mapSourceInput.value || 'satellite');
+        })();
+    </script>
+@endpush

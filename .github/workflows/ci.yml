@@ -65,6 +65,9 @@ jobs:
       - name: Verify migrations and seeders
         run: php artisan migrate:fresh --seed --force
 
+      - name: Run GIS and hazard feature tests
+        run: php artisan test tests/Feature/SatgasPotentialHazardReviewFeatureTest.php
+
       - name: Verify Blade templates compile
         run: php artisan view:cache
 
@@ -100,6 +103,7 @@ jobs:
         shell: bash
         run: |
           test -s docs/postman-testing-routes.csv
+          test -s public/img/campus-denah/20260430_144208.jpg
           python - <<'PY'
           import csv
           from pathlib import Path
@@ -126,3 +130,10 @@ jobs:
               url = row["URL"]
               assert not any(fragment in url for fragment in blocked_fragments), f"Route admin nonaktif masih ada: {url}"
           PY
+
+      - name: Validate README documents GIS workflow
+        shell: bash
+        run: |
+          grep -q "Alur GIS Area Rawan" README.md
+          grep -q "/satgas/hazards/map-points" README.md
+          grep -q "hazard_map_points" README.md

@@ -110,6 +110,106 @@ class SatgasPotentialHazardReviewFeatureTest extends TestCase
             ->assertSeeText('tidak memerlukan perubahan status lanjutan', false);
     }
 
+    public function test_satgas_can_save_hazard_gis_pinpoint(): void
+    {
+        $satgas = $this->createSatgasUser();
+        $reporter = $this->createMahasiswaUser();
+        $location = $this->createLocation();
+
+        $report = PotentialHazardReport::query()->create([
+            'report_number' => 'HZD-GIS-001',
+            'reported_by' => $reporter->id,
+            'location_id' => $location->id,
+            'hazard_type' => 'lingkungan',
+            'title' => 'Jalur licin dekat workshop',
+            'status' => 'reviewed',
+            'submitted_at' => now(),
+        ]);
+
+        $this->actingAs($satgas)
+            ->patch(route('satgas.hazards.update-pinpoint', $report), [
+                'map_source' => 'satellite',
+                'latitude' => '-6.8761000',
+                'longitude' => '107.6206300',
+                'risk_level' => 'tinggi',
+            ])
+            ->assertRedirect(route('satgas.hazards.show', $report))
+            ->assertSessionHas('status', 'Pinpoint GIS hazard berhasil disimpan.');
+
+        $this->assertDatabaseHas('potential_hazard_reports', [
+            'id' => $report->id,
+            'latitude' => '-6.8761000',
+            'longitude' => '107.6206300',
+            'risk_level' => 'tinggi',
+            'mapped_by' => $satgas->id,
+        ]);
+    }
+
+    public function test_satgas_can_save_hazard_floorplan_pinpoint(): void
+    {
+        $satgas = $this->createSatgasUser();
+        $reporter = $this->createMahasiswaUser();
+        $location = $this->createLocation();
+
+        $report = PotentialHazardReport::query()->create([
+            'report_number' => 'HZD-DENAH-001',
+            'reported_by' => $reporter->id,
+            'location_id' => $location->id,
+            'hazard_type' => 'peralatan',
+            'title' => 'Area mesin perlu pembatas',
+            'status' => 'reviewed',
+            'submitted_at' => now(),
+        ]);
+
+        $this->actingAs($satgas)
+            ->patch(route('satgas.hazards.update-pinpoint', $report), [
+                'map_source' => 'floorplan',
+                'floorplan_x' => '1220.500',
+                'floorplan_y' => '2140.250',
+                'risk_level' => 'kritis',
+            ])
+            ->assertRedirect(route('satgas.hazards.show', $report))
+            ->assertSessionHas('status', 'Pinpoint GIS hazard berhasil disimpan.');
+
+        $this->assertDatabaseHas('potential_hazard_reports', [
+            'id' => $report->id,
+            'map_source' => 'floorplan',
+            'floorplan_x' => '1220.500',
+            'floorplan_y' => '2140.250',
+            'risk_level' => 'kritis',
+            'mapped_by' => $satgas->id,
+        ]);
+    }
+
+    public function test_satgas_can_create_standalone_hazard_map_point(): void
+    {
+        $satgas = $this->createSatgasUser();
+
+        $this->actingAs($satgas)
+            ->post(route('satgas.hazards.map-points.store'), [
+                'title' => 'Area tangga licin',
+                'hazard_type' => 'lingkungan',
+                'risk_level' => 'tinggi',
+                'description' => 'Perlu rambu peringatan saat hujan.',
+                'map_source' => 'satellite',
+                'latitude' => '-6.8761000',
+                'longitude' => '107.6206300',
+            ])
+            ->assertRedirect(route('satgas.hazards.map'))
+            ->assertSessionHas('status', 'Titik area rawan GIS berhasil ditambahkan.');
+
+        $this->assertDatabaseHas('hazard_map_points', [
+            'title' => 'Area tangga licin',
+            'hazard_type' => 'lingkungan',
+            'risk_level' => 'tinggi',
+            'map_source' => 'satellite',
+            'latitude' => '-6.8761000',
+            'longitude' => '107.6206300',
+            'created_by' => $satgas->id,
+            'is_active' => true,
+        ]);
+    }
+
     protected function createSatgasUser(): User
     {
         $role = Role::query()->create(['name' => 'Satgas', 'code' => 'satgas']);

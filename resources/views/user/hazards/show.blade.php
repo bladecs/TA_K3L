@@ -44,6 +44,20 @@
                                 </span>
                             </p>
                         </div>
+                        <div>
+                            <p class="font-semibold uppercase tracking-[0.2em] text-slate-400">Koordinat GIS</p>
+                            <p class="mt-2 text-base text-slate-700">
+                                @if ($hazardReport->latitude && $hazardReport->longitude)
+                                    {{ $hazardReport->latitude }}, {{ $hazardReport->longitude }}
+                                @else
+                                    Belum dipetakan Satgas
+                                @endif
+                            </p>
+                        </div>
+                        <div>
+                            <p class="font-semibold uppercase tracking-[0.2em] text-slate-400">Level Risiko</p>
+                            <p class="mt-2 text-base text-slate-700">{{ $hazardReport->risk_level ? ucfirst($hazardReport->risk_level) : '-' }}</p>
+                        </div>
                     </div>
 
                     <div class="mt-8 space-y-5">

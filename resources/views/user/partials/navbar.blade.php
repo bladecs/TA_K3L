@@ -27,6 +27,11 @@
                 <span class="material-symbols-outlined text-[var(--primary-color)]">book_5</span>
                 <span class="font-bold text-[var(--primary-color)]">Materi K3</span>
             </a>
+            <a href="{{ route('user.hazards.map') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('user.hazards.map') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                <span class="material-symbols-outlined text-[var(--primary-color)]">map</span>
+                <span class="font-bold text-[var(--primary-color)]">Peta</span>
+            </a>
             <a href="{{ route('user.emergency.index') }}"
                 class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('user.emergency.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
                 <span class="material-symbols-outlined text-[var(--primary-color)]">emergency_home</span>
@@ -40,6 +45,17 @@
                 <span class="material-symbols-outlined text-[20px]">contract_edit</span>
                 Lapor Insiden
             </a>
+
+            @auth
+                <form action="{{ route('logout') }}" method="POST" class="hidden sm:block">
+                    @csrf
+                    <button type="submit"
+                        class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-rose-600 transition hover:bg-rose-50"
+                        title="Keluar">
+                        <span class="material-symbols-outlined text-[20px]">logout</span>
+                    </button>
+                </form>
+            @endauth
 
             <details class="group relative lg:hidden">
                 <summary
@@ -69,6 +85,10 @@
                             <span class="material-symbols-outlined text-[var(--primary-color)]">warning</span>
                             Potensi Bahaya
                         </a>
+                        <a href="{{ route('user.hazards.map') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)]">
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">map</span>
+                            Peta Hazard
+                        </a>
                         <a href="{{ route('user.knowledge.index') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)]">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">book_5</span>
                             Materi K3
@@ -77,6 +97,16 @@
                             <span class="material-symbols-outlined text-[var(--primary-color)]">emergency_home</span>
                             Pusat Darurat
                         </a>
+                        @auth
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-rose-600 transition hover:bg-rose-50">
+                                    <span class="material-symbols-outlined">logout</span>
+                                    Keluar
+                                </button>
+                            </form>
+                        @endauth
                     </div>
                 </div>
             </details>

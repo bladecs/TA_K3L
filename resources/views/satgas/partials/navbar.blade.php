@@ -25,9 +25,15 @@
             </a>
 
             <a href="{{ route('satgas.hazards.index') }}"
-                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.hazards.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.hazards.index', 'satgas.hazards.show', 'satgas.hazards.create') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
                 <span class="material-symbols-outlined text-[var(--primary-color)]">warning</span>
                 <h6 class="font-bold text-[var(--primary-color)]">Review Hazard</h6>
+            </a>
+
+            <a href="{{ route('satgas.hazards.map') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('satgas.hazards.map') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                <span class="material-symbols-outlined text-[var(--primary-color)]">map</span>
+                <h6 class="font-bold text-[var(--primary-color)]">GIS</h6>
             </a>
 
             <a href="{{ route('satgas.knowledge-articles.index') }}"
@@ -66,6 +72,12 @@
                             class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('satgas.hazards.create') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">add_alert</span>
                             Buat Hazard Report
+                        </a>
+
+                        <a href="{{ route('satgas.hazards.map') }}"
+                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('satgas.hazards.map') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">satellite_alt</span>
+                            Peta GIS Hazard
                         </a>
 
                         <a href="{{ route('satgas.knowledge-articles.create') }}"

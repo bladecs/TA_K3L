@@ -40,8 +40,11 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/emergency-center', EmergencyCenterController::class)->name('emergency.index');
     Route::get('/knowledge-center', KnowledgeCenterController::class)->name('knowledge.index');
     Route::get('/knowledge-center/module/{slug}', KnowledgeModuleController::class)->name('knowledge.show');
+    Route::get('/hazard-map', [PotentialHazardReportController::class, 'map'])->name('hazards.map');
+    Route::get('/hazard-reports', [PotentialHazardReportController::class, 'index'])->middleware(['auth', 'active.user'])->name('hazards.index');
     Route::get('/hazard-reports/create', PotentialHazardReportController::class)->name('hazards.create');
     Route::post('/hazard-reports', [PotentialHazardReportController::class, 'store'])->name('hazards.store');
+    Route::get('/hazard-reports/{potentialHazardReport}', [PotentialHazardReportController::class, 'show'])->middleware(['auth', 'active.user'])->name('hazards.show');
 
     Route::prefix('incidents')->name('incidents.')->group(function () {
         Route::get('/status', [IncidentReportController::class, 'status'])->name('status');
@@ -80,8 +83,11 @@ Route::middleware(['auth', 'active.user', 'role:satgas'])->prefix('satgas')->nam
     Route::prefix('hazards')->name('hazards.')->group(function () {
         Route::get('/create', [SatgasPotentialHazardReportController::class, 'create'])->name('create');
         Route::post('/', [SatgasPotentialHazardReportController::class, 'store'])->name('store');
+        Route::get('/map', [PotentialHazardReviewController::class, 'map'])->name('map');
+        Route::post('/map-points', [PotentialHazardReviewController::class, 'storeMapPoint'])->name('map-points.store');
         Route::get('/', [PotentialHazardReviewController::class, 'index'])->name('index');
         Route::get('/{potentialHazardReport}', [PotentialHazardReviewController::class, 'show'])->name('show');
+        Route::patch('/{potentialHazardReport}/pinpoint', [PotentialHazardReviewController::class, 'updatePinpoint'])->name('update-pinpoint');
         Route::patch('/{potentialHazardReport}/status', [PotentialHazardReviewController::class, 'updateStatus'])->name('update-status');
     });
 });
