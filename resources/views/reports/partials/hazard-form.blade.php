@@ -149,13 +149,22 @@
                     </section>
 
                     <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
-                        <div class="mb-5 flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
-                                <span class="material-symbols-outlined">edit_note</span>
-                            </span>
+                        <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                                    <span class="material-symbols-outlined">edit_note</span>
+                                </span>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900">Catatan tambahan</h3>
+                                    <p class="text-sm text-slate-500">Sertakan kondisi aktual, risiko terdekat, atau saran pengamanan sementara.</p>
+                                </div>
+                            </div>
                             <div>
-                                <h3 class="text-xl font-bold text-slate-900">Catatan tambahan</h3>
-                                <p class="text-sm text-slate-500">Sertakan kondisi aktual, risiko terdekat, atau saran pengamanan sementara.</p>
+                                <button type="button" data-voice-target="hazard-notes"
+                                    class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--primary-color)]/15 bg-white px-4 py-2 text-xs font-bold text-[var(--primary-color)] transition hover:bg-[var(--blue-low-opacity)]">
+                                    <span class="material-symbols-outlined text-base" data-voice-icon>mic</span>
+                                    <span data-voice-label>Voice to Text</span>
+                                </button>
                             </div>
                         </div>
 
@@ -272,6 +281,79 @@
             };
 
             input.addEventListener('change', renderFiles);
+        })();
+
+        (() => {
+            const button = document.querySelector('[data-voice-target="hazard-notes"]');
+            const textarea = document.getElementById('hazard-notes');
+            const icon = button?.querySelector('[data-voice-icon]');
+            const label = button?.querySelector('[data-voice-label]');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!button || !textarea || !SpeechRecognition) {
+                if (button) {
+                    button.disabled = true;
+                    button.classList.add('opacity-50', 'cursor-not-allowed');
+                    button.title = 'Voice to text belum didukung browser ini';
+                }
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.interimResults = false;
+            recognition.continuous = false;
+
+            let isListening = false;
+
+            recognition.addEventListener('start', () => {
+                isListening = true;
+                textarea.focus();
+                button.classList.remove('border-[var(--primary-color)]/15', 'bg-white', 'text-[var(--primary-color)]', 'hover:bg-[var(--blue-low-opacity)]');
+                button.classList.add('border-rose-600', 'bg-rose-600', 'text-white', 'hover:bg-rose-700');
+                if (icon) {
+                    icon.textContent = 'stop_circle';
+                }
+                if (label) {
+                    label.textContent = 'Stop';
+                }
+            });
+
+            recognition.addEventListener('end', () => {
+                isListening = false;
+                button.classList.remove('border-rose-600', 'bg-rose-600', 'text-white', 'hover:bg-rose-700');
+                button.classList.add('border-[var(--primary-color)]/15', 'bg-white', 'text-[var(--primary-color)]', 'hover:bg-[var(--blue-low-opacity)]');
+                if (icon) {
+                    icon.textContent = 'mic';
+                }
+                if (label) {
+                    label.textContent = 'Voice to Text';
+                }
+            });
+
+            recognition.addEventListener('result', (event) => {
+                const transcript = Array.from(event.results)
+                    .map((result) => result[0]?.transcript || '')
+                    .join(' ')
+                    .trim();
+
+                if (transcript !== '') {
+                    textarea.value = textarea.value.trim() === ''
+                        ? transcript
+                        : `${textarea.value.trim()} ${transcript}`;
+                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+
+            button.addEventListener('click', () => {
+                if (isListening) {
+                    recognition.stop();
+                    return;
+                }
+
+                textarea.focus();
+                recognition.start();
+            });
         })();
     </script>
 @endpush

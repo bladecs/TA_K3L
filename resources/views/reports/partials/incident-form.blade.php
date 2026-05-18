@@ -148,7 +148,14 @@
 
                             <div class="grid gap-5 md:grid-cols-2">
                                 <div>
-                                    <label for="cause" class="mb-2 block text-sm font-bold text-slate-700">Penyebab yang diketahui</label>
+                                    <div class="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <label for="cause" class="block text-sm font-bold text-slate-700">Penyebab yang diketahui</label>
+                                        <button type="button" data-voice-target="cause"
+                                            class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--primary-color)]/15 bg-white px-4 py-2 text-xs font-bold text-[var(--primary-color)] transition hover:bg-[var(--blue-low-opacity)]">
+                                            <span class="material-symbols-outlined text-base" data-voice-icon>mic</span>
+                                            <span data-voice-label>Voice to Text</span>
+                                        </button>
+                                    </div>
                                     <textarea id="cause" name="cause" rows="4" placeholder="Faktor alat, perilaku, lingkungan, atau prosedur."
                                         class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('cause') }}</textarea>
                                     @error('cause')
@@ -157,7 +164,14 @@
                                 </div>
 
                                 <div>
-                                    <label for="initial_action" class="mb-2 block text-sm font-bold text-slate-700">Tindakan awal / P3K</label>
+                                    <div class="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <label for="initial_action" class="block text-sm font-bold text-slate-700">Tindakan awal / P3K</label>
+                                        <button type="button" data-voice-target="initial_action"
+                                            class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--primary-color)]/15 bg-white px-4 py-2 text-xs font-bold text-[var(--primary-color)] transition hover:bg-[var(--blue-low-opacity)]">
+                                            <span class="material-symbols-outlined text-base" data-voice-icon>mic</span>
+                                            <span data-voice-label>Voice to Text</span>
+                                        </button>
+                                    </div>
                                     <textarea id="initial_action" name="initial_action" rows="4" placeholder="Tuliskan bantuan pertama atau tindakan pengamanan yang sudah dilakukan."
                                         class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('initial_action') }}</textarea>
                                     @error('initial_action')
@@ -277,75 +291,105 @@
         })();
 
         (() => {
-            const button = document.querySelector('[data-voice-target="chronology"]');
-            const textarea = document.getElementById('chronology');
-            const icon = button?.querySelector('[data-voice-icon]');
-            const label = button?.querySelector('[data-voice-label]');
+            const buttons = Array.from(document.querySelectorAll('[data-voice-target]'));
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-            if (!button || !textarea || !SpeechRecognition) {
-                if (button) {
-                    button.disabled = true;
-                    button.classList.add('opacity-50', 'cursor-not-allowed');
-                    button.title = 'Voice to text belum didukung browser ini';
-                }
+            if (buttons.length === 0) {
                 return;
             }
 
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
-            recognition.interimResults = false;
-            recognition.continuous = false;
+            if (!SpeechRecognition) {
+                buttons.forEach((button) => {
+                    button.disabled = true;
+                    button.classList.add('opacity-50', 'cursor-not-allowed');
+                    button.title = 'Voice to text belum didukung browser ini';
+                });
+                return;
+            }
 
-            let isListening = false;
+            let activeRecognition = null;
 
-            recognition.addEventListener('start', () => {
-                isListening = true;
-                textarea.focus();
-                button.classList.remove('border-[var(--primary-color)]/15', 'bg-white', 'text-[var(--primary-color)]', 'hover:bg-[var(--blue-low-opacity)]');
-                button.classList.add('border-rose-600', 'bg-rose-600', 'text-white', 'hover:bg-rose-700');
+            const setListeningState = (button, isListening) => {
+                const icon = button.querySelector('[data-voice-icon]');
+                const label = button.querySelector('[data-voice-label]');
+
+                button.classList.toggle('border-[var(--primary-color)]/15', !isListening);
+                button.classList.toggle('bg-white', !isListening);
+                button.classList.toggle('text-[var(--primary-color)]', !isListening);
+                button.classList.toggle('hover:bg-[var(--blue-low-opacity)]', !isListening);
+                button.classList.toggle('border-rose-600', isListening);
+                button.classList.toggle('bg-rose-600', isListening);
+                button.classList.toggle('text-white', isListening);
+                button.classList.toggle('hover:bg-rose-700', isListening);
+
                 if (icon) {
-                    icon.textContent = 'stop_circle';
+                    icon.textContent = isListening ? 'stop_circle' : 'mic';
                 }
                 if (label) {
-                    label.textContent = 'Stop';
+                    label.textContent = isListening ? 'Stop' : 'Voice to Text';
                 }
-            });
+            };
 
-            recognition.addEventListener('end', () => {
-                isListening = false;
-                button.classList.remove('border-rose-600', 'bg-rose-600', 'text-white', 'hover:bg-rose-700');
-                button.classList.add('border-[var(--primary-color)]/15', 'bg-white', 'text-[var(--primary-color)]', 'hover:bg-[var(--blue-low-opacity)]');
-                if (icon) {
-                    icon.textContent = 'mic';
-                }
-                if (label) {
-                    label.textContent = 'Voice to Text';
-                }
-            });
+            buttons.forEach((button) => {
+                const targetId = button.dataset.voiceTarget;
+                const textarea = targetId ? document.getElementById(targetId) : null;
 
-            recognition.addEventListener('result', (event) => {
-                const transcript = Array.from(event.results)
-                    .map((result) => result[0]?.transcript || '')
-                    .join(' ')
-                    .trim();
-
-                if (transcript !== '') {
-                    textarea.value = textarea.value.trim() === ''
-                        ? transcript
-                        : `${textarea.value.trim()} ${transcript}`;
-                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            });
-
-            button.addEventListener('click', () => {
-                if (isListening) {
-                    recognition.stop();
+                if (!textarea) {
+                    button.disabled = true;
+                    button.classList.add('opacity-50', 'cursor-not-allowed');
+                    button.title = 'Target voice to text tidak ditemukan';
                     return;
                 }
 
-                textarea.focus();
-                recognition.start();
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'id-ID';
+                recognition.interimResults = false;
+                recognition.continuous = false;
+
+                let isListening = false;
+
+                recognition.addEventListener('start', () => {
+                    isListening = true;
+                    activeRecognition = recognition;
+                    textarea.focus();
+                    setListeningState(button, true);
+                });
+
+                recognition.addEventListener('end', () => {
+                    isListening = false;
+                    if (activeRecognition === recognition) {
+                        activeRecognition = null;
+                    }
+                    setListeningState(button, false);
+                });
+
+                recognition.addEventListener('result', (event) => {
+                    const transcript = Array.from(event.results)
+                        .map((result) => result[0]?.transcript || '')
+                        .join(' ')
+                        .trim();
+
+                    if (transcript !== '') {
+                        textarea.value = textarea.value.trim() === ''
+                            ? transcript
+                            : `${textarea.value.trim()} ${transcript}`;
+                        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                });
+
+                button.addEventListener('click', () => {
+                    if (isListening) {
+                        recognition.stop();
+                        return;
+                    }
+
+                    if (activeRecognition) {
+                        activeRecognition.stop();
+                    }
+
+                    textarea.focus();
+                    recognition.start();
+                });
             });
         })();
     </script>
