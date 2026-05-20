@@ -15,6 +15,20 @@ class PotentialHazardReportFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_hazard_create_page_displays_combined_report_switcher(): void
+    {
+        $user = $this->createMahasiswaUser();
+
+        $this->actingAs($user)
+            ->get(route('user.hazards.create'))
+            ->assertOk()
+            ->assertSeeText('Form Pelaporan K3L')
+            ->assertSeeText('Form Insiden')
+            ->assertSeeText('Form Hazard')
+            ->assertSee('data-report-panel="incident"', false)
+            ->assertSee('data-report-panel="hazard"', false);
+    }
+
     public function test_user_can_submit_potential_hazard_report(): void
     {
         Storage::fake('public');

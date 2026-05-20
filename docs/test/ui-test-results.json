@@ -1,0 +1,220 @@
+{
+  "generated_at": "2026-05-20T04:15:06.133Z",
+  "base_url": "http://127.0.0.1:8000",
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "results": [
+    {
+      "role": "public",
+      "name": "public-dashboard",
+      "path": "/user/dashboard",
+      "finalUrl": "http://127.0.0.1:8000/user/dashboard",
+      "expectedText": [
+        "SIAGA POLMAN",
+        "Lapor Insiden"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-dashboard.png"
+    },
+    {
+      "role": "public",
+      "name": "public-incident-form",
+      "path": "/user/incidents/create",
+      "finalUrl": "http://127.0.0.1:8000/user/incidents/create",
+      "expectedText": [
+        "Form Pelaporan K3L",
+        "Data korban",
+        "Analisa awal kejadian",
+        "Usulan pencegahan"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-incident-form.png"
+    },
+    {
+      "role": "public",
+      "name": "public-incident-status",
+      "path": "/user/incidents/status",
+      "finalUrl": "http://127.0.0.1:8000/user/incidents/status",
+      "expectedText": [
+        "Cek Status",
+        "Nomor"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-incident-status.png"
+    },
+    {
+      "role": "public",
+      "name": "public-hazard-form",
+      "path": "/user/hazard-reports/create",
+      "finalUrl": "http://127.0.0.1:8000/user/hazard-reports/create",
+      "expectedText": [
+        "Form Pelaporan K3L",
+        "Laporkan potensi bahaya",
+        "Jenis potensi bahaya"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-hazard-form.png"
+    },
+    {
+      "role": "public",
+      "name": "public-hazard-map",
+      "path": "/user/hazard-map",
+      "finalUrl": "http://127.0.0.1:8000/user/dashboard#peta-gis-hazard",
+      "expectedText": [
+        "Peta",
+        "Titik"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-hazard-map.png"
+    },
+    {
+      "role": "public",
+      "name": "public-knowledge",
+      "path": "/user/knowledge-center",
+      "finalUrl": "http://127.0.0.1:8000/user/knowledge-center",
+      "expectedText": [
+        "Materi",
+        "K3"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-knowledge.png"
+    },
+    {
+      "role": "public",
+      "name": "public-emergency",
+      "path": "/user/emergency-center",
+      "finalUrl": "http://127.0.0.1:8000/user/emergency-center",
+      "expectedText": [
+        "Darurat",
+        "Pertolongan"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-emergency.png"
+    },
+    {
+      "role": "satgas",
+      "name": "satgas-dashboard",
+      "path": "/satgas/dashboard",
+      "finalUrl": "http://127.0.0.1:8000/satgas/dashboard",
+      "expectedText": [
+        "Dashboard",
+        "Satgas"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/satgas-dashboard.png"
+    },
+    {
+      "role": "satgas",
+      "name": "satgas-incidents",
+      "path": "/satgas/incidents",
+      "finalUrl": "http://127.0.0.1:8000/satgas/incidents",
+      "expectedText": [
+        "Insiden"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/satgas-incidents.png"
+    },
+    {
+      "role": "satgas",
+      "name": "satgas-hazards",
+      "path": "/satgas/hazards",
+      "finalUrl": "http://127.0.0.1:8000/satgas/hazards",
+      "expectedText": [
+        "Hazard"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/satgas-hazards.png"
+    },
+    {
+      "role": "satgas",
+      "name": "satgas-map",
+      "path": "/satgas/hazards/map",
+      "finalUrl": "http://127.0.0.1:8000/satgas/hazards/map",
+      "expectedText": [
+        "Peta",
+        "Titik"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/satgas-map.png"
+    },
+    {
+      "role": "satgas",
+      "name": "satgas-knowledge",
+      "path": "/satgas/knowledge-articles",
+      "finalUrl": "http://127.0.0.1:8000/satgas/knowledge-articles",
+      "expectedText": [
+        "Artikel"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/satgas-knowledge.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-dashboard",
+      "path": "/admin/dashboard",
+      "finalUrl": "http://127.0.0.1:8000/admin/dashboard",
+      "expectedText": [
+        "Dashboard",
+        "Admin"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-dashboard.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-users",
+      "path": "/admin/users",
+      "finalUrl": "http://127.0.0.1:8000/admin/users",
+      "expectedText": [
+        "Kelola Semua Akun"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-users.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-locations",
+      "path": "/admin/locations",
+      "finalUrl": "http://127.0.0.1:8000/admin/locations",
+      "expectedText": [
+        "Lokasi"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-locations.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-incident-categories",
+      "path": "/admin/incident-categories",
+      "finalUrl": "http://127.0.0.1:8000/admin/incident-categories",
+      "expectedText": [
+        "Kategori"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-incident-categories.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-emergency-contacts",
+      "path": "/admin/emergency-contacts",
+      "finalUrl": "http://127.0.0.1:8000/admin/emergency-contacts",
+      "expectedText": [
+        "Kontak"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-emergency-contacts.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-first-aid",
+      "path": "/admin/first-aid-guides",
+      "finalUrl": "http://127.0.0.1:8000/admin/first-aid-guides",
+      "expectedText": [
+        "Pertolongan"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-first-aid.png"
+    }
+  ]
+}

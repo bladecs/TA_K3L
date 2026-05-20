@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laporan Pengujian Fungsi Newman</title>
+  <style>
+    :root { color-scheme: light; --blue:#0f4fb8; --green:#15803d; --red:#b91c1c; --slate:#334155; --line:#dbe3ef; --bg:#f4f7fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: #0f172a; }
+    header { background: linear-gradient(120deg, #0f4fb8, #11316e); color: white; padding: 32px 40px; }
+    header h1 { margin: 0 0 8px; font-size: 28px; }
+    header p { margin: 0; opacity: .9; }
+    main { padding: 28px 40px 44px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .card { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .card span { display: block; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .card strong { display: block; margin-top: 8px; font-size: 28px; color: var(--blue); }
+    section { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 20px; overflow: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 900px; }
+    th, td { border-bottom: 1px solid #e5edf7; padding: 10px 12px; text-align: left; vertical-align: top; font-size: 13px; }
+    th { background: #f8fafc; color: #334155; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+    .passed { color: var(--green); font-weight: 700; }
+    .failed { color: var(--red); font-weight: 700; }
+    .code { font-family: Consolas, Monaco, monospace; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Laporan Pengujian Fungsi Newman</h1>
+    <p>Sistem Informasi K3L Politeknik Manufaktur Bandung</p>
+  </header>
+  <main>
+    <div class="cards"><div class="card"><span>Total Request</span><strong>79</strong></div><div class="card"><span>Request Gagal</span><strong>0</strong></div><div class="card"><span>Total Assertion</span><strong>237</strong></div><div class="card"><span>Assertion Gagal</span><strong>0</strong></div><div class="card"><span>Durasi</span><strong>37.5 detik</strong></div></div>
+    <section>
+    <table>
+      <thead>
+        <tr><th>No</th><th>Nama Pengujian</th><th>Method</th><th>URL</th><th>Code</th><th>Status</th></tr>
+      </thead>
+      <tbody><tr>
+      <td>1</td>
+      <td>Root redirect portal</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td>Halaman login</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td>Halaman register</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/register</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td>Dashboard publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td>Emergency center publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/emergency-center</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>6</td>
+      <td>Knowledge center publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/knowledge-center</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>7</td>
+      <td>Detail knowledge publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/knowledge-center/module/panduan-dasar-apd-area-praktikum</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>8</td>
+      <td>Peta GIS publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/hazard-map</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>9</td>
+      <td>Form hazard publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/hazard-reports/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>10</td>
+      <td>Submit hazard publik</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/user/hazard-reports</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>11</td>
+      <td>Form insiden publik</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>12</td>
+      <td>Submit insiden publik</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>13</td>
+      <td>Cek status insiden</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents/status</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>14</td>
+      <td>Cek status insiden dengan query</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents/status?q=INC-0001</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>15</td>
+      <td>Detail insiden publik aman</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents/1</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>16</td>
+      <td>Akses daftar insiden publik dialihkan login</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/incidents</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>17</td>
+      <td>Akses daftar hazard publik dialihkan login</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/hazard-reports</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>18</td>
+      <td>Ambil CSRF login admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>19</td>
+      <td>Login admin</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>20</td>
+      <td>Dashboard admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>21</td>
+      <td>Daftar user</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/users</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>22</td>
+      <td>Form tambah user</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/users/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>23</td>
+      <td>Tambah user</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/users</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>24</td>
+      <td>Form edit user aman</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/users/3/edit</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>25</td>
+      <td>Daftar lokasi</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/locations</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>26</td>
+      <td>Form tambah lokasi</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/locations/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>27</td>
+      <td>Tambah lokasi</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/locations</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>28</td>
+      <td>Daftar kategori insiden</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/incident-categories</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>29</td>
+      <td>Form tambah kategori insiden</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/incident-categories/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>30</td>
+      <td>Tambah kategori insiden</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/incident-categories</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>31</td>
+      <td>Monitoring hazard admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/hazards</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>32</td>
+      <td>Detail hazard monitoring aman</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/hazards/1</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>33</td>
+      <td>Daftar kategori knowledge</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-categories</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>34</td>
+      <td>Form tambah kategori knowledge</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-categories/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>35</td>
+      <td>Tambah kategori knowledge</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-categories</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>36</td>
+      <td>Daftar artikel knowledge admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-articles</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>37</td>
+      <td>Form artikel knowledge admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-articles/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>38</td>
+      <td>Tambah artikel knowledge admin</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/knowledge-articles</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>39</td>
+      <td>Daftar kontak darurat</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-contacts</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>40</td>
+      <td>Form kontak darurat</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-contacts/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>41</td>
+      <td>Tambah kontak darurat</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-contacts</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>42</td>
+      <td>Daftar langkah tanggap darurat</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-response-steps</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>43</td>
+      <td>Form langkah tanggap darurat</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-response-steps/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>44</td>
+      <td>Tambah langkah tanggap darurat</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/emergency-response-steps</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>45</td>
+      <td>Daftar first aid</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/first-aid-guides</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>46</td>
+      <td>Form first aid</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/first-aid-guides/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>47</td>
+      <td>Tambah first aid</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/admin/first-aid-guides</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>48</td>
+      <td>Logout admin</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/logout</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>49</td>
+      <td>Ambil CSRF login satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>50</td>
+      <td>Login satgas</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>51</td>
+      <td>Dashboard satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>52</td>
+      <td>Profil satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/profile</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>53</td>
+      <td>Update profil satgas</td>
+      <td class="code">PATCH</td>
+      <td class="code">http://127.0.0.1:8000/satgas/profile</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>54</td>
+      <td>Daftar insiden satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>55</td>
+      <td>Form insiden satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>56</td>
+      <td>Submit insiden satgas</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>57</td>
+      <td>Detail insiden satgas aman</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents/15</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>58</td>
+      <td>Verifikasi insiden aman</td>
+      <td class="code">PATCH</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents/15/verify</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>59</td>
+      <td>Update status insiden aman</td>
+      <td class="code">PATCH</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents/15/status</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>60</td>
+      <td>Tambah follow up insiden aman</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/satgas/incidents/15/follow-ups</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>61</td>
+      <td>Daftar hazard satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>62</td>
+      <td>Form hazard satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>63</td>
+      <td>Submit hazard satgas</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>64</td>
+      <td>Peta hazard satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards/map</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>65</td>
+      <td>Tambah titik peta hazard</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards/map-points</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>66</td>
+      <td>Detail hazard satgas aman</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards/14</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>67</td>
+      <td>Update status hazard aman</td>
+      <td class="code">PATCH</td>
+      <td class="code">http://127.0.0.1:8000/satgas/hazards/14/status</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>68</td>
+      <td>Daftar artikel knowledge satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/knowledge-articles</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>69</td>
+      <td>Form artikel knowledge satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/knowledge-articles/create</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>70</td>
+      <td>Tambah artikel knowledge satgas</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/satgas/knowledge-articles</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>71</td>
+      <td>Logout satgas</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/logout</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>72</td>
+      <td>Admin route tanpa login dialihkan</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>73</td>
+      <td>Satgas route tanpa login dialihkan</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>74</td>
+      <td>Ambil CSRF login mahasiswa</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>75</td>
+      <td>Login mahasiswa</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/login</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>76</td>
+      <td>Mahasiswa tidak boleh akses admin</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/admin/dashboard</td>
+      <td class="code">403</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>77</td>
+      <td>Mahasiswa tidak boleh akses satgas</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/satgas/dashboard</td>
+      <td class="code">403</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>78</td>
+      <td>Ambil CSRF dashboard mahasiswa</td>
+      <td class="code">GET</td>
+      <td class="code">http://127.0.0.1:8000/user/dashboard</td>
+      <td class="code">200</td>
+      <td class="passed">passed</td>
+    </tr>
+<tr>
+      <td>79</td>
+      <td>Logout mahasiswa</td>
+      <td class="code">POST</td>
+      <td class="code">http://127.0.0.1:8000/logout</td>
+      <td class="code">302</td>
+      <td class="passed">passed</td>
+    </tr></tbody>
+    </table>
+  </section>
+  </main>
+</body>
+</html>

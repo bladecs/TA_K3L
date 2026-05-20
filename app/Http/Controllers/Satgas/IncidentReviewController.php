@@ -65,6 +65,8 @@ class IncidentReviewController extends Controller
 
         $incidentReport->load([
             'category',
+            'injuryCategory',
+            'bodyPart',
             'location',
             'reporter',
             'victim',

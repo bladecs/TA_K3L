@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laporan Pengujian UI Smoke Test</title>
+  <style>
+    :root { color-scheme: light; --blue:#0f4fb8; --green:#15803d; --red:#b91c1c; --slate:#334155; --line:#dbe3ef; --bg:#f4f7fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: #0f172a; }
+    header { background: linear-gradient(120deg, #0f4fb8, #11316e); color: white; padding: 32px 40px; }
+    header h1 { margin: 0 0 8px; font-size: 28px; }
+    header p { margin: 0; opacity: .9; }
+    main { padding: 28px 40px 44px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .card { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .card span { display: block; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .card strong { display: block; margin-top: 8px; font-size: 28px; color: var(--blue); }
+    section { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 20px; overflow: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 900px; }
+    th, td { border-bottom: 1px solid #e5edf7; padding: 10px 12px; text-align: left; vertical-align: top; font-size: 13px; }
+    th { background: #f8fafc; color: #334155; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+    .passed { color: var(--green); font-weight: 700; }
+    .failed { color: var(--red); font-weight: 700; }
+    .code { font-family: Consolas, Monaco, monospace; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Laporan Pengujian UI Smoke Test</h1>
+    <p>Sistem Informasi K3L Politeknik Manufaktur Bandung</p>
+  </header>
+  <main>
+    <div class="cards"><div class="card"><span>Total Skenario</span><strong>18</strong></div><div class="card"><span>Berhasil</span><strong>18</strong></div><div class="card"><span>Gagal</span><strong>0</strong></div><div class="card"><span>Base URL</span><strong>http://127.0.0.1:8000</strong></div></div>
+    <section>
+    <table>
+      <thead>
+        <tr><th>No</th><th>Role</th><th>Halaman</th><th>Validasi Teks</th><th>Status</th><th>Screenshot</th></tr>
+      </thead>
+      <tbody><tr>
+      <td>1</td>
+      <td>public</td>
+      <td class="code">/user/dashboard</td>
+      <td>SIAGA POLMAN, Lapor Insiden</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-dashboard.png">ui-screenshots/public-dashboard.png</a></td>
+    </tr>
+<tr>
+      <td>2</td>
+      <td>public</td>
+      <td class="code">/user/incidents/create</td>
+      <td>Form Pelaporan K3L, Data korban, Analisa awal kejadian, Usulan pencegahan</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-incident-form.png">ui-screenshots/public-incident-form.png</a></td>
+    </tr>
+<tr>
+      <td>3</td>
+      <td>public</td>
+      <td class="code">/user/incidents/status</td>
+      <td>Cek Status, Nomor</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-incident-status.png">ui-screenshots/public-incident-status.png</a></td>
+    </tr>
+<tr>
+      <td>4</td>
+      <td>public</td>
+      <td class="code">/user/hazard-reports/create</td>
+      <td>Form Pelaporan K3L, Laporkan potensi bahaya, Jenis potensi bahaya</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-hazard-form.png">ui-screenshots/public-hazard-form.png</a></td>
+    </tr>
+<tr>
+      <td>5</td>
+      <td>public</td>
+      <td class="code">/user/hazard-map</td>
+      <td>Peta, Titik</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-hazard-map.png">ui-screenshots/public-hazard-map.png</a></td>
+    </tr>
+<tr>
+      <td>6</td>
+      <td>public</td>
+      <td class="code">/user/knowledge-center</td>
+      <td>Materi, K3</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-knowledge.png">ui-screenshots/public-knowledge.png</a></td>
+    </tr>
+<tr>
+      <td>7</td>
+      <td>public</td>
+      <td class="code">/user/emergency-center</td>
+      <td>Darurat, Pertolongan</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/public-emergency.png">ui-screenshots/public-emergency.png</a></td>
+    </tr>
+<tr>
+      <td>8</td>
+      <td>satgas</td>
+      <td class="code">/satgas/dashboard</td>
+      <td>Dashboard, Satgas</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/satgas-dashboard.png">ui-screenshots/satgas-dashboard.png</a></td>
+    </tr>
+<tr>
+      <td>9</td>
+      <td>satgas</td>
+      <td class="code">/satgas/incidents</td>
+      <td>Insiden</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/satgas-incidents.png">ui-screenshots/satgas-incidents.png</a></td>
+    </tr>
+<tr>
+      <td>10</td>
+      <td>satgas</td>
+      <td class="code">/satgas/hazards</td>
+      <td>Hazard</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/satgas-hazards.png">ui-screenshots/satgas-hazards.png</a></td>
+    </tr>
+<tr>
+      <td>11</td>
+      <td>satgas</td>
+      <td class="code">/satgas/hazards/map</td>
+      <td>Peta, Titik</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/satgas-map.png">ui-screenshots/satgas-map.png</a></td>
+    </tr>
+<tr>
+      <td>12</td>
+      <td>satgas</td>
+      <td class="code">/satgas/knowledge-articles</td>
+      <td>Artikel</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/satgas-knowledge.png">ui-screenshots/satgas-knowledge.png</a></td>
+    </tr>
+<tr>
+      <td>13</td>
+      <td>admin</td>
+      <td class="code">/admin/dashboard</td>
+      <td>Dashboard, Admin</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-dashboard.png">ui-screenshots/admin-dashboard.png</a></td>
+    </tr>
+<tr>
+      <td>14</td>
+      <td>admin</td>
+      <td class="code">/admin/users</td>
+      <td>Kelola Semua Akun</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-users.png">ui-screenshots/admin-users.png</a></td>
+    </tr>
+<tr>
+      <td>15</td>
+      <td>admin</td>
+      <td class="code">/admin/locations</td>
+      <td>Lokasi</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-locations.png">ui-screenshots/admin-locations.png</a></td>
+    </tr>
+<tr>
+      <td>16</td>
+      <td>admin</td>
+      <td class="code">/admin/incident-categories</td>
+      <td>Kategori</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-incident-categories.png">ui-screenshots/admin-incident-categories.png</a></td>
+    </tr>
+<tr>
+      <td>17</td>
+      <td>admin</td>
+      <td class="code">/admin/emergency-contacts</td>
+      <td>Kontak</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-emergency-contacts.png">ui-screenshots/admin-emergency-contacts.png</a></td>
+    </tr>
+<tr>
+      <td>18</td>
+      <td>admin</td>
+      <td class="code">/admin/first-aid-guides</td>
+      <td>Pertolongan</td>
+      <td class="passed">passed</td>
+      <td><a href="ui-screenshots/admin-first-aid.png">ui-screenshots/admin-first-aid.png</a></td>
+    </tr></tbody>
+    </table>
+  </section>
+  </main>
+</body>
+</html>

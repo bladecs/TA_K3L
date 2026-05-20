@@ -21,7 +21,10 @@ class PotentialHazardReportController extends Controller
 
     public function __invoke(Request $request): View
     {
-        return view('user.hazards.create', $this->reportFormOptions->hazard());
+        return view('user.reports.create', array_merge(
+            $this->reportFormOptions->combined(),
+            ['activeReportType' => 'hazard'],
+        ));
     }
 
     public function index(Request $request): View

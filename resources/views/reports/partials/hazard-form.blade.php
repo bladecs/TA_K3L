@@ -6,6 +6,7 @@
 
         <div class="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_380px]">
             <form action="{{ $formAction }}" method="POST" enctype="multipart/form-data"
+                data-report-form="hazard"
                 class="section-shell rounded-[2rem] p-5 shadow-[0_22px_55px_rgba(15,23,42,0.12)] ring-1 ring-white/80 lg:p-8">
                 @csrf
 
@@ -284,8 +285,9 @@
         })();
 
         (() => {
-            const button = document.querySelector('[data-voice-target="hazard-notes"]');
-            const textarea = document.getElementById('hazard-notes');
+            const form = document.querySelector('[data-report-form="hazard"]');
+            const button = form?.querySelector('[data-voice-target="hazard-notes"]');
+            const textarea = form?.querySelector('#hazard-notes');
             const icon = button?.querySelector('[data-voice-icon]');
             const label = button?.querySelector('[data-voice-label]');
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

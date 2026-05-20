@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Actions\Hazards\CreatePotentialHazardReport;
 use App\Models\ActivityLog;
+use App\Models\BodyPart;
 use App\Models\IncidentCategory;
 use App\Models\IncidentReport;
+use App\Models\InjuryCategory;
 use App\Models\Location;
 use App\Models\Role;
 use App\Models\User;
@@ -21,25 +23,48 @@ class ActivityLogFeatureTest extends TestCase
         $user = $this->createMahasiswaUser();
         $satgas = $this->createSatgasUser();
         $category = IncidentCategory::query()->create(['name' => 'Unsafe Action']);
+        $injuryCategory = InjuryCategory::query()->create(['name' => 'Luka Memar']);
+        $bodyPart = BodyPart::query()->create(['name' => 'Kaki']);
         $location = $this->createLocation();
 
         $this->actingAs($user)
             ->post(route('user.incidents.store'), [
                 'victim_type' => 'self',
                 'incident_category_id' => $category->id,
+                'injury_category_id' => $injuryCategory->id,
+                'body_part_id' => $bodyPart->id,
                 'location_id' => $location->id,
                 'incident_date' => '2026-04-25',
                 'incident_time' => '09:00',
                 'severity_level' => 'medium',
+                'victim_name' => 'Rachmat Hidayat',
+                'victim_position' => 'mahasiswa',
+                'victim_gender' => 'male',
+                'victim_age' => 22,
+                'witness_name' => 'Abdul Muhyi',
+                'ppe_used' => 'Tidak ada',
                 'title' => 'Area kerja licin',
                 'chronology' => 'Lantai area kerja licin dan perlu penanganan.',
                 'cause' => 'Tumpahan cairan belum dibersihkan.',
                 'initial_action' => 'Area diberi rambu sementara.',
                 'impact' => 'Berpotensi menyebabkan terpeleset.',
+                'unsafe_conditions' => ['area_kerja_berbahaya'],
+                'unsafe_actions' => ['penggunaan_alat_tidak_aman'],
+                'unsafe_condition_cause' => 'Area belum diberi pembatas.',
+                'unsafe_action_cause' => 'Instruksi kerja belum jelas.',
+                'warning_given_before_incident' => '0',
+                'incident_previously_occurred' => '0',
+                'proposed_preventions' => ['pengamanan_sumber_bahaya', 'inspeksi_rutin'],
+                'prevention_action_plan' => 'Pasang pembatas dan jadwalkan inspeksi rutin.',
             ])
             ->assertRedirect(route('user.incidents.index'));
 
         $report = IncidentReport::query()->firstOrFail();
+
+        $this->assertSame('Rachmat Hidayat', $report->victim_name);
+        $this->assertSame('Abdul Muhyi', $report->witness_name);
+        $this->assertSame(['area_kerja_berbahaya'], $report->unsafe_conditions);
+        $this->assertSame(['pengamanan_sumber_bahaya', 'inspeksi_rutin'], $report->proposed_preventions);
 
         $this->actingAs($satgas)
             ->patch(route('satgas.incidents.verify', $report), [

@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-05-20T04:14:22.628Z",
+  "collection": "Sistem Informasi K3L - Web Route Functional Test",
+  "requests": {
+    "total": 79,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 237,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": 0,
+  "duration_ms": 37481
+}

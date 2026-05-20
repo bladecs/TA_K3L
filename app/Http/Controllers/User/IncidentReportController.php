@@ -142,13 +142,18 @@ class IncidentReportController extends Controller
 
     public function create(): View
     {
-        return view('user.incidents.create', $this->reportFormOptions->incident());
+        return view('user.reports.create', array_merge(
+            $this->reportFormOptions->combined(),
+            ['activeReportType' => 'incident'],
+        ));
     }
 
     public function show(IncidentReport $incidentReport): View
     {
         $incidentReport->load([
             'category',
+            'injuryCategory',
+            'bodyPart',
             'location',
             'reporter',
             'victim',

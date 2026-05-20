@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\IncidentCategory;
 use App\Models\IncidentFollowUp;
 use App\Models\IncidentReport;
+use App\Models\InjuryCategory;
+use App\Models\BodyPart;
 use App\Models\Location;
 use App\Models\Role;
 use App\Models\User;
@@ -57,6 +59,8 @@ class SatgasIncidentReviewFeatureTest extends TestCase
         $satgas = $this->createSatgasUser();
         $reporter = $this->createMahasiswaUser();
         $category = IncidentCategory::query()->create(['name' => 'Near Miss']);
+        $injuryCategory = InjuryCategory::query()->create(['name' => 'Luka Memar']);
+        $bodyPart = BodyPart::query()->create(['name' => 'Kaki']);
         $location = Location::query()->create([
             'name' => 'Laboratorium Kimia',
             'code' => 'LAB-KIM',
@@ -67,12 +71,27 @@ class SatgasIncidentReviewFeatureTest extends TestCase
             'report_number' => 'INC-DET-001',
             'reported_by' => $reporter->id,
             'incident_category_id' => $category->id,
+            'injury_category_id' => $injuryCategory->id,
+            'body_part_id' => $bodyPart->id,
             'location_id' => $location->id,
             'incident_date' => '2026-04-25',
             'incident_time' => '09:15:00',
             'severity_level' => 'high',
+            'victim_name' => 'Rachmat Hidayat',
+            'victim_position' => 'mahasiswa',
+            'victim_gender' => 'male',
+            'victim_age' => 22,
+            'witness_name' => 'Abdul Muhyi',
+            'ppe_used' => 'Tidak ada',
             'title' => 'Perlu inspeksi lanjutan',
             'chronology' => 'Temuan membutuhkan inspeksi lanjutan dan sudah dicatat oleh satgas.',
+            'impact' => 'Korban mengalami memar ringan.',
+            'unsafe_conditions' => ['area_kerja_berbahaya'],
+            'unsafe_actions' => ['penggunaan_alat_tidak_aman'],
+            'warning_given_before_incident' => false,
+            'incident_previously_occurred' => false,
+            'proposed_preventions' => ['pengamanan_sumber_bahaya', 'inspeksi_rutin'],
+            'prevention_action_plan' => 'Pasang pembatas dan jadwalkan inspeksi rutin.',
             'status' => 'investigating',
             'submitted_at' => now(),
         ]);
@@ -91,7 +110,13 @@ class SatgasIncidentReviewFeatureTest extends TestCase
             ->assertOk()
             ->assertSeeText('Tindak Lanjut')
             ->assertSeeText('Jadwalkan inspeksi panel dan batasi akses sementara.')
-            ->assertSeeText('Lampiran');
+            ->assertSeeText('Lampiran')
+            ->assertSeeText('Rachmat Hidayat')
+            ->assertSeeText('Abdul Muhyi')
+            ->assertSeeText('Luka Memar')
+            ->assertSeeText('Area kerja yang berbahaya')
+            ->assertSeeText('Beri pengamanan pada sumber bahaya')
+            ->assertSeeText('Pasang pembatas dan jadwalkan inspeksi rutin.');
     }
 
     public function test_satgas_cannot_reverify_closed_incident_from_detail_page(): void

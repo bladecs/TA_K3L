@@ -16,6 +16,55 @@
             'rejected' => 'bg-rose-100 text-rose-700',
             default => 'bg-slate-100 text-slate-600',
         };
+        $yesNo = fn ($value) => $value === null ? '-' : ($value ? 'Ya' : 'Tidak');
+        $victimPositions = [
+            'mahasiswa' => 'Mahasiswa',
+            'karyawan' => 'Karyawan',
+            'publik' => 'Publik',
+            'kontraktor' => 'Kontraktor',
+            'pengunjung' => 'Pengunjung',
+        ];
+        $unsafeConditionOptions = [
+            'pengamanan_tidak_memadai' => 'Pengamanan yang tidak memadai',
+            'tidak_ada_pengamanan_lokasi_berbahaya' => 'Tidak ada pengamanan pada lokasi berbahaya',
+            'apd_cacat' => 'Alat pelindung diri yang cacat',
+            'alat_kerja_cacat' => 'Alat kerja yang cacat',
+            'area_kerja_berbahaya' => 'Area kerja yang berbahaya',
+            'pencahayaan_tidak_memadai' => 'Pencahayaan tidak memadai',
+            'ventilasi_tidak_memadai' => 'Ventilasi tidak memadai',
+            'kurang_apd' => 'Kurangnya alat pelindung diri (APD)',
+            'kurang_alat_kerja' => 'Kurangnya alat kerja yang memadai',
+            'pakaian_tidak_aman' => 'Pakaian yang tidak aman',
+            'kurang_pelatihan' => 'Tidak ada atau kurangnya pelatihan kerja',
+            'lain_lain' => 'Lain-lain',
+        ];
+        $unsafeActionOptions = [
+            'pengoperasian_tanpa_ijin' => 'Pengoperasian tanpa ijin',
+            'kecepatan_tidak_terkendali' => 'Pengoperasian dengan kecepatan tidak terkendali',
+            'alat_pengaman_tidak_berfungsi' => 'Menyebabkan alat pengaman tidak berfungsi',
+            'menggunakan_alat_cacat' => 'Menggunakan alat kerja yang cacat',
+            'penggunaan_alat_tidak_aman' => 'Penggunaan alat kerja dengan cara tidak aman',
+            'pengangkatan_tidak_aman' => 'Pengangkatan tidak aman',
+            'posisi_kerja_tidak_aman' => 'Menyebabkan posisi kerja tidak aman',
+            'pengalih_perhatian' => 'Pengalih perhatian atau bercanda saat bekerja',
+            'tidak_menggunakan_apd' => 'Tidak menggunakan alat pelindung diri (APD)',
+            'tidak_menggunakan_alat_tersedia' => 'Tidak menggunakan alat kerja yang tersedia',
+            'lain_lain' => 'Lain-lain',
+        ];
+        $preventionOptions = [
+            'hentikan_aktivitas' => 'Hentikan aktivitas',
+            'pengamanan_sumber_bahaya' => 'Beri pengamanan pada sumber bahaya',
+            'rancang_ulang_langkah_kerja' => 'Rancang ulang langkah kerja',
+            'kebijakan_baru' => 'Buat kebijakan / peraturan baru',
+            'inspeksi_rutin' => 'Inspeksi rutin pada sumber bahaya',
+            'pelatihan_tenaga_kerja' => 'Beri pelatihan pada tenaga kerja',
+            'pelatihan_pengawas' => 'Beri pelatihan pada pengawas kerja',
+            'rancang_ulang_tempat_kerja' => 'Rancang ulang tempat kerja',
+            'perkuat_kebijakan' => 'Perkuat penerapan kebijakan yang sudah ada',
+            'penggunaan_apd' => 'Penggunaan alat pelindung diri (APD)',
+            'lain_lain' => 'Lain-lain',
+        ];
+        $labels = fn (?array $values, array $options) => collect($values ?? [])->map(fn ($value) => $options[$value] ?? $value)->implode(', ') ?: '-';
     @endphp
 
     <section class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -43,7 +92,7 @@
                     </div>
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Tanggal</p>
-                        <p class="mt-2 text-slate-800">{{ optional($incidentReport->incident_date)->format('d M Y') }}</p>
+                        <p class="mt-2 text-slate-800">{{ optional($incidentReport->incident_date)->format('d M Y') }} {{ $incidentReport->incident_time ? substr($incidentReport->incident_time, 0, 5) : '' }}</p>
                     </div>
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</p>
@@ -52,6 +101,14 @@
                                 {{ str_replace('_', ' ', $incidentReport->status) }}
                             </span>
                         </p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Korban</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->victim_name ?? $incidentReport->victim?->name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Saksi</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->witness_name ?: '-' }}</p>
                     </div>
                 </div>
 
@@ -67,6 +124,53 @@
                     <div>
                         <p class="font-semibold text-slate-900">Dampak</p>
                         <p class="mt-2">{{ $incidentReport->impact ?: '-' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
+                <h3 class="text-lg font-semibold text-slate-900">Data Investigasi dari Pelapor</h3>
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 text-sm">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Posisi korban</p>
+                        <p class="mt-2 text-slate-800">{{ $victimPositions[$incidentReport->victim_position] ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis kelamin / umur</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->victim_gender === 'male' ? 'Laki-laki' : ($incidentReport->victim_gender === 'female' ? 'Perempuan' : '-') }}{{ $incidentReport->victim_age ? ' / '.$incidentReport->victim_age.' tahun' : '' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis cedera</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->injuryCategory?->name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Bagian tubuh cedera</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->bodyPart?->name ?? '-' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">APD digunakan</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->ppe_used ?: '-' }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Kondisi tidak aman</p>
+                        <p class="mt-2 text-slate-800">{{ $labels($incidentReport->unsafe_conditions, $unsafeConditionOptions) }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Tindakan tidak aman</p>
+                        <p class="mt-2 text-slate-800">{{ $labels($incidentReport->unsafe_actions, $unsafeActionOptions) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sudah diperingatkan</p>
+                        <p class="mt-2 text-slate-800">{{ $yesNo($incidentReport->warning_given_before_incident) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Pernah terjadi sebelumnya</p>
+                        <p class="mt-2 text-slate-800">{{ $yesNo($incidentReport->incident_previously_occurred) }}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Usulan pencegahan</p>
+                        <p class="mt-2 text-slate-800">{{ $labels($incidentReport->proposed_preventions, $preventionOptions) }}</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->prevention_action_plan ?: '-' }}</p>
                     </div>
                 </div>
             </div>
