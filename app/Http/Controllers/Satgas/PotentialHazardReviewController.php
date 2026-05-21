@@ -160,6 +160,7 @@ class PotentialHazardReviewController extends Controller
             'reviewer',
             'resolver',
             'mapper',
+            'campusRoom',
         ]);
 
         $statusOptions = collect(

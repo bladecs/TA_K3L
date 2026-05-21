@@ -47,6 +47,15 @@
                         <p class="mt-2 text-slate-800">{{ $hazardReport->specific_location ?: '-' }}</p>
                     </div>
                     <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Lantai / Ruangan</p>
+                        <p class="mt-2 text-slate-800">
+                            {{ $hazardReport->building_floor ? 'Lantai '.$hazardReport->building_floor : '-' }}
+                            @if ($hazardReport->campusRoom)
+                                - {{ $hazardReport->campusRoom->name }}
+                            @endif
+                        </p>
+                    </div>
+                    <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</p>
                         <p class="mt-2">
                             <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide {{ $statusBadge }}">

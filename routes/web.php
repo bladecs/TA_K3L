@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\CampusRoomController;
 use App\Http\Controllers\Admin\EmergencyContactController;
 use App\Http\Controllers\Admin\EmergencyResponseStepController;
 use App\Http\Controllers\Admin\FirstAidGuideController;
@@ -74,6 +75,7 @@ Route::middleware(['auth', 'active.user', 'role:admin'])->prefix('admin')->name(
     Route::resource('emergency-response-steps', EmergencyResponseStepController::class)->except(['show']);
     Route::resource('first-aid-guides', FirstAidGuideController::class)->except(['show']);
     Route::resource('locations', LocationController::class)->except(['show']);
+    Route::resource('campus-rooms', CampusRoomController::class)->except(['show']);
     Route::resource('incident-categories', IncidentCategoryController::class)->except(['show']);
     Route::resource('knowledge-categories', KnowledgeCategoryController::class)->except(['show']);
     Route::resource('knowledge-articles', KnowledgeArticleController::class)->except(['show']);

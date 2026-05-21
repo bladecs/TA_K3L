@@ -23,6 +23,9 @@ class PotentialHazardReport extends Model
         'latitude',
         'longitude',
         'location_accuracy',
+        'building_key',
+        'building_floor',
+        'campus_room_id',
         'risk_level',
         'mapped_by',
         'mapped_at',
@@ -46,6 +49,7 @@ class PotentialHazardReport extends Model
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
             'location_accuracy' => 'decimal:2',
+            'building_floor' => 'integer',
             'mapped_at' => 'datetime',
             'floorplan_x' => 'decimal:3',
             'floorplan_y' => 'decimal:3',
@@ -75,6 +79,11 @@ class PotentialHazardReport extends Model
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function campusRoom(): BelongsTo
+    {
+        return $this->belongsTo(CampusRoom::class);
     }
 
     public function attachments(): HasMany

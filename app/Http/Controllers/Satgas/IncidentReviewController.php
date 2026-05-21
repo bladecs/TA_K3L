@@ -143,6 +143,7 @@ class IncidentReviewController extends Controller
             'injuries.injuryCategory',
             'injuries.bodyPart',
             'location',
+            'campusRoom',
             'verifiedLocation',
             'locationVerifier',
             'reporter',

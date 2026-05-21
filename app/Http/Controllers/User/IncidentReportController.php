@@ -157,6 +157,7 @@ class IncidentReportController extends Controller
             'injuries.injuryCategory',
             'injuries.bodyPart',
             'location',
+            'campusRoom',
             'reporter',
             'victim',
             'attachments',

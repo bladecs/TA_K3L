@@ -151,6 +151,31 @@
                                     </div>
                                 </div>
 
+                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 hidden" data-hazard-room-panel>
+                                    <input type="hidden" name="building_key" id="hazard-building-key" value="{{ old('building_key') }}">
+                                    <p class="text-sm font-bold text-slate-800">Gedung, lantai, dan ruangan</p>
+                                    <p class="mt-1 text-xs leading-5 text-slate-500">Terisi saat GPS masuk polygon gedung. Pilih lantai lalu ruangan bila data master sudah tersedia.</p>
+                                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label for="hazard-building-floor" class="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Lantai</label>
+                                            <select id="hazard-building-floor" name="building_floor"
+                                                class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none">
+                                                <option value="">Pilih lantai</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="hazard-campus-room-id" class="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Ruangan</label>
+                                            <select id="hazard-campus-room-id" name="campus_room_id"
+                                                class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none">
+                                                <option value="">Pilih ruangan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @error('campus_room_id')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div>
                                     <label for="hazard-specific-location" class="mb-2 block text-sm font-bold text-slate-700">Detail lokasi hazard</label>
                                     <input id="hazard-specific-location" name="specific_location" type="text" value="{{ old('specific_location') }}" required
@@ -339,8 +364,15 @@
             const longitudeInput = gpsPanel?.querySelector('#hazard-longitude');
             const accuracyInput = gpsPanel?.querySelector('#hazard-location-accuracy');
             const locationSelect = form?.querySelector('#hazard-location');
+            const roomPanel = form?.querySelector('[data-hazard-room-panel]');
+            const buildingKeyInput = form?.querySelector('#hazard-building-key');
+            const floorSelect = form?.querySelector('#hazard-building-floor');
+            const roomSelect = form?.querySelector('#hazard-campus-room-id');
             const campusBuildings = @json($campusBuildingPolygons ?? []);
             const campusBoundary = @json($campusBoundaryPolygon ?? []);
+            const campusRooms = @json($campusRoomsByBuilding ?? []);
+            const oldFloor = @json(old('building_floor'));
+            const oldRoomId = @json(old('campus_room_id'));
 
             if (!gpsPanel || !button || !latitudeInput || !longitudeInput || !accuracyInput || !status) {
                 return;
@@ -405,6 +437,58 @@
                 return true;
             };
 
+            const resetRoomSelection = () => {
+                if (roomPanel) {
+                    roomPanel.classList.add('hidden');
+                }
+                if (buildingKeyInput) {
+                    buildingKeyInput.value = '';
+                }
+                if (floorSelect) {
+                    floorSelect.innerHTML = '<option value="">Pilih lantai</option>';
+                }
+                if (roomSelect) {
+                    roomSelect.innerHTML = '<option value="">Pilih ruangan</option>';
+                }
+            };
+
+            const fillRooms = (buildingKey, selectedFloor = null, selectedRoomId = null) => {
+                if (!roomPanel || !buildingKeyInput || !floorSelect || !roomSelect) {
+                    return;
+                }
+
+                const floors = campusRooms[buildingKey] || {};
+                const floorValues = Object.keys(floors).sort((a, b) => Number(a) - Number(b));
+                roomPanel.classList.remove('hidden');
+                buildingKeyInput.value = buildingKey;
+                floorSelect.innerHTML = '<option value="">Pilih lantai</option>';
+                floorValues.forEach((floor) => {
+                    const option = document.createElement('option');
+                    option.value = floor;
+                    option.textContent = `Lantai ${floor}`;
+                    option.selected = String(selectedFloor || '') === String(floor);
+                    floorSelect.appendChild(option);
+                });
+
+                const renderRoomOptions = () => {
+                    const rooms = floors[floorSelect.value] || [];
+                    roomSelect.innerHTML = '<option value="">Pilih ruangan</option>';
+                    rooms.forEach((room) => {
+                        const option = document.createElement('option');
+                        option.value = room.id;
+                        option.textContent = room.code ? `${room.name} / ${room.code}` : room.name;
+                        option.selected = String(selectedRoomId || '') === String(room.id);
+                        roomSelect.appendChild(option);
+                    });
+                };
+
+                floorSelect.onchange = renderRoomOptions;
+                if (!floorSelect.value && floorValues.length === 1) {
+                    floorSelect.value = floorValues[0];
+                }
+                renderRoomOptions();
+            };
+
             const clearCoordinates = (message) => {
                 latitudeInput.value = '';
                 longitudeInput.value = '';
@@ -420,6 +504,7 @@
                 const isInsidePolman = isPointInsidePolygon([lat, lng], campusBoundary);
 
                 if (!isInsidePolman) {
+                    resetRoomSelection();
                     clearCoordinates('Koordinat hazard berada di luar area Polman. Ambil GPS dari area kampus.');
                     return;
                 }
@@ -432,10 +517,12 @@
 
                 const detected = buildingAt(lat, lng);
                 if (detected && selectLocationByName(detected.name)) {
+                    fillRooms(detected.key, oldFloor, oldRoomId);
                     status.textContent = `Koordinat masuk area Polman dan terdeteksi di ${detected.name}.`;
                     return;
                 }
 
+                resetRoomSelection();
                 status.textContent = 'Koordinat masuk area Polman. Pilih lokasi utama yang paling dekat, lalu isi detail lokasi hazard.';
             };
 

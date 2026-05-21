@@ -32,6 +32,9 @@ class IncidentReport extends Model
         'longitude',
         'location_accuracy',
         'specific_location',
+        'building_key',
+        'building_floor',
+        'campus_room_id',
         'verified_location_id',
         'verified_specific_location',
         'verified_latitude',
@@ -73,6 +76,7 @@ class IncidentReport extends Model
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
             'location_accuracy' => 'decimal:2',
+            'building_floor' => 'integer',
             'verified_latitude' => 'decimal:7',
             'verified_longitude' => 'decimal:7',
             'verified_location_accuracy' => 'decimal:2',
@@ -126,6 +130,11 @@ class IncidentReport extends Model
     public function verifiedLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'verified_location_id');
+    }
+
+    public function campusRoom(): BelongsTo
+    {
+        return $this->belongsTo(CampusRoom::class);
     }
 
     public function locationVerifier(): BelongsTo

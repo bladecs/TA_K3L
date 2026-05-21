@@ -449,6 +449,31 @@
                                 @enderror
                             </div>
 
+                            <div class="md:col-span-2 hidden rounded-2xl border border-slate-200 bg-slate-50 p-4" data-incident-room-panel>
+                                <input type="hidden" name="building_key" id="incident-building-key" value="{{ old('building_key') }}">
+                                <p class="text-sm font-bold text-slate-800">Gedung, lantai, dan ruangan</p>
+                                <p class="mt-1 text-xs leading-5 text-slate-500" data-incident-room-help>Terisi setelah GPS mendeteksi area gedung. Pilih lantai lalu ruangan bila datanya tersedia.</p>
+                                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <label for="incident-building-floor" class="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Lantai</label>
+                                        <select id="incident-building-floor" name="building_floor"
+                                            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none">
+                                            <option value="">Pilih lantai</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="incident-campus-room-id" class="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Ruangan</label>
+                                        <select id="incident-campus-room-id" name="campus_room_id"
+                                            class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none">
+                                            <option value="">Pilih ruangan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @error('campus_room_id')
+                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             @if ($isPublicIncidentForm)
                                 <div class="md:col-span-2 rounded-2xl border border-rose-100 bg-rose-50/60 p-4" data-incident-injuries>
                                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -751,7 +776,14 @@
             const specificLocationPanel = form?.querySelector('[data-incident-specific-location]');
             const specificLocationInput = form?.querySelector('#incident-specific-location');
             const specificLocationHelp = form?.querySelector('[data-incident-specific-location-help]');
+            const roomPanel = form?.querySelector('[data-incident-room-panel]');
+            const buildingKeyInput = form?.querySelector('#incident-building-key');
+            const floorSelect = form?.querySelector('#incident-building-floor');
+            const roomSelect = form?.querySelector('#incident-campus-room-id');
             const campusBuildings = @json($campusBuildingPolygons ?? []);
+            const campusRooms = @json($campusRoomsByBuilding ?? []);
+            const oldFloor = @json(old('building_floor'));
+            const oldRoomId = @json(old('campus_room_id'));
 
             if (!gpsPanel || !button || !latitudeInput || !longitudeInput || !accuracyInput || !status) {
                 return;
@@ -818,6 +850,58 @@
                 return true;
             };
 
+            const resetRoomSelection = () => {
+                if (roomPanel) {
+                    roomPanel.classList.add('hidden');
+                }
+                if (buildingKeyInput) {
+                    buildingKeyInput.value = '';
+                }
+                if (floorSelect) {
+                    floorSelect.innerHTML = '<option value="">Pilih lantai</option>';
+                }
+                if (roomSelect) {
+                    roomSelect.innerHTML = '<option value="">Pilih ruangan</option>';
+                }
+            };
+
+            const fillRooms = (buildingKey, selectedFloor = null, selectedRoomId = null) => {
+                if (!roomPanel || !buildingKeyInput || !floorSelect || !roomSelect) {
+                    return;
+                }
+
+                const floors = campusRooms[buildingKey] || {};
+                const floorValues = Object.keys(floors).sort((a, b) => Number(a) - Number(b));
+                roomPanel.classList.remove('hidden');
+                buildingKeyInput.value = buildingKey;
+                floorSelect.innerHTML = '<option value="">Pilih lantai</option>';
+                floorValues.forEach((floor) => {
+                    const option = document.createElement('option');
+                    option.value = floor;
+                    option.textContent = `Lantai ${floor}`;
+                    option.selected = String(selectedFloor || '') === String(floor);
+                    floorSelect.appendChild(option);
+                });
+
+                const renderRoomOptions = () => {
+                    const rooms = floors[floorSelect.value] || [];
+                    roomSelect.innerHTML = '<option value="">Pilih ruangan</option>';
+                    rooms.forEach((room) => {
+                        const option = document.createElement('option');
+                        option.value = room.id;
+                        option.textContent = room.code ? `${room.name} / ${room.code}` : room.name;
+                        option.selected = String(selectedRoomId || '') === String(room.id);
+                        roomSelect.appendChild(option);
+                    });
+                };
+
+                floorSelect.onchange = renderRoomOptions;
+                if (!floorSelect.value && floorValues.length === 1) {
+                    floorSelect.value = floorValues[0];
+                }
+                renderRoomOptions();
+            };
+
             const showSpecificLocation = (detectedName, isOutsidePolman = false) => {
                 if (!specificLocationPanel || !specificLocationInput) {
                     return;
@@ -846,6 +930,7 @@
                 if (detected) {
                     const isSelected = selectLocationByName(detected.name);
                     showSpecificLocation(detected.name, false);
+                    fillRooms(detected.key, oldFloor, oldRoomId);
 
                     status.textContent = isSelected
                         ? `Koordinat masuk area ${detected.name}. Lokasi kejadian terisi otomatis.`
@@ -854,6 +939,7 @@
                 }
 
                 const isOutsideSelected = selectLocationByName('Diluar Polman');
+                resetRoomSelection();
                 showSpecificLocation('Diluar Polman', true);
                 status.textContent = isOutsideSelected
                     ? 'Koordinat berada di luar polygon Polman. Lokasi kejadian terisi Diluar Polman.'

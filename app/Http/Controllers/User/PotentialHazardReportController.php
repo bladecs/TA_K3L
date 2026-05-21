@@ -71,6 +71,7 @@ class PotentialHazardReportController extends Controller
 
         $potentialHazardReport->load([
             'location',
+            'campusRoom',
             'attachments',
             'reviewer',
             'resolver',

@@ -125,6 +125,15 @@
                                 <dd class="mt-2 text-sm text-slate-800">{{ $incidentReport->specific_location ?: '-' }}</dd>
                             </div>
                             <div>
+                                <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Lantai / Ruangan</dt>
+                                <dd class="mt-2 text-sm text-slate-800">
+                                    {{ $incidentReport->building_floor ? 'Lantai '.$incidentReport->building_floor : '-' }}
+                                    @if ($incidentReport->campusRoom)
+                                        - {{ $incidentReport->campusRoom->name }}
+                                    @endif
+                                </dd>
+                            </div>
+                            <div>
                                 <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Koordinat GPS</dt>
                                 <dd class="mt-2 text-sm text-slate-800">
                                     @if ($incidentReport->latitude && $incidentReport->longitude)

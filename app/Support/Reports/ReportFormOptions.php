@@ -3,6 +3,7 @@
 namespace App\Support\Reports;
 
 use App\Models\BodyPart;
+use App\Models\CampusRoom;
 use App\Models\IncidentCategory;
 use App\Models\InjuryCategory;
 use App\Models\Location;
@@ -19,6 +20,7 @@ class ReportFormOptions
             'injuryCategories' => InjuryCategory::query()->orderBy('name')->get(),
             'bodyParts' => BodyPart::query()->orderBy('name')->get(),
             'campusBuildingPolygons' => app(PublicHazardMapData::class)->campusBuildingPolygons(),
+            'campusRoomsByBuilding' => $this->campusRoomsByBuilding(),
             'severityOptions' => [
                 'low' => 'Rendah',
                 'medium' => 'Sedang',
@@ -90,6 +92,7 @@ class ReportFormOptions
             'selectedHazardType' => old('hazard_type', $hazardTypes[0]['key']),
             'campusBuildingPolygons' => app(PublicHazardMapData::class)->campusBuildingPolygons(),
             'campusBoundaryPolygon' => app(PublicHazardMapData::class)->campusBoundaryPolygon(),
+            'campusRoomsByBuilding' => $this->campusRoomsByBuilding(),
         ];
     }
 
@@ -118,5 +121,31 @@ class ReportFormOptions
         }
 
         return $locations;
+    }
+
+    protected function campusRoomsByBuilding(): array
+    {
+        if (! Schema::hasTable('campus_rooms')) {
+            return [];
+        }
+
+        return CampusRoom::query()
+            ->where('is_active', true)
+            ->orderBy('building_name')
+            ->orderBy('floor')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get()
+            ->groupBy('building_key')
+            ->map(fn ($buildingRooms) => $buildingRooms
+                ->groupBy('floor')
+                ->map(fn ($floorRooms) => $floorRooms->map(fn (CampusRoom $room) => [
+                    'id' => $room->id,
+                    'name' => $room->name,
+                    'code' => $room->code,
+                    'floor' => $room->floor,
+                ])->values())
+                ->toArray())
+            ->toArray();
     }
 }
