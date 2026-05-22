@@ -79,157 +79,161 @@
                         </div>
                     </section>
 
-                    <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
-                        <div class="mb-5 flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
-                                <span class="material-symbols-outlined">healing</span>
-                            </span>
-                            <div>
-                                <h3 class="text-xl font-bold text-slate-900">Cedera dan dampak</h3>
-                                <p class="text-sm text-slate-500">Bagian ini mengikuti kebutuhan data korban pada formulir investigasi kecelakaan.</p>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-5 md:grid-cols-2">
-                            <div>
-                                <label for="injury_category_id" class="mb-2 block text-sm font-bold text-slate-700">Jenis cedera</label>
-                                <select id="injury_category_id" name="injury_category_id"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                    <option value="">Tidak ada / belum diketahui</option>
-                                    @foreach ($injuryCategories as $injuryCategory)
-                                        <option value="{{ $injuryCategory->id }}" @selected(old('injury_category_id') == $injuryCategory->id)>{{ $injuryCategory->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('injury_category_id')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
+                    @unless ($isPublicIncidentForm)
+                        <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
+                            <div class="mb-5 flex items-center gap-3">
+                                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
+                                    <span class="material-symbols-outlined">healing</span>
+                                </span>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900">Cedera dan dampak</h3>
+                                    <p class="text-sm text-slate-500">Bagian ini mengikuti kebutuhan data korban pada formulir investigasi kecelakaan.</p>
+                                </div>
                             </div>
 
-                            <div>
-                                <label for="body_part_id" class="mb-2 block text-sm font-bold text-slate-700">Bagian tubuh yang cedera</label>
-                                <select id="body_part_id" name="body_part_id"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                    <option value="">Tidak ada / belum diketahui</option>
-                                    @foreach ($bodyParts as $bodyPart)
-                                        <option value="{{ $bodyPart->id }}" @selected(old('body_part_id') == $bodyPart->id)>{{ $bodyPart->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('body_part_id')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
+                            <div class="grid gap-5 md:grid-cols-2">
+                                <div>
+                                    <label for="injury_category_id" class="mb-2 block text-sm font-bold text-slate-700">Jenis cedera</label>
+                                    <select id="injury_category_id" name="injury_category_id"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
+                                        <option value="">Tidak ada / belum diketahui</option>
+                                        @foreach ($injuryCategories as $injuryCategory)
+                                            <option value="{{ $injuryCategory->id }}" @selected(old('injury_category_id') == $injuryCategory->id)>{{ $injuryCategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('injury_category_id')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="body_part_id" class="mb-2 block text-sm font-bold text-slate-700">Bagian tubuh yang cedera</label>
+                                    <select id="body_part_id" name="body_part_id"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
+                                        <option value="">Tidak ada / belum diketahui</option>
+                                        @foreach ($bodyParts as $bodyPart)
+                                            <option value="{{ $bodyPart->id }}" @selected(old('body_part_id') == $bodyPart->id)>{{ $bodyPart->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('body_part_id')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="ppe_used" class="mb-2 block text-sm font-bold text-slate-700">APD yang digunakan saat kejadian</label>
+                                    <textarea id="ppe_used" name="ppe_used" rows="4" placeholder="Contoh: helm, sarung tangan, safety shoes, atau tulis tidak ada"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('ppe_used') }}</textarea>
+                                    @error('ppe_used')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="impact" class="mb-2 block text-sm font-bold text-slate-700">Dampak langsung</label>
+                                    <textarea id="impact" name="impact" rows="4" placeholder="Tuliskan cedera, kerusakan, gangguan aktivitas, atau dampak lain yang terjadi."
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('impact') }}</textarea>
+                                    @error('impact')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </section>
+                    @endunless
+
+                    @unless ($isPublicIncidentForm)
+                        <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
+                            <div class="mb-5 flex items-center gap-3">
+                                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                                    <span class="material-symbols-outlined">rule</span>
+                                </span>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900">Analisa awal kejadian</h3>
+                                    <p class="text-sm text-slate-500">Pilih kondisi atau tindakan tidak aman yang terlihat saat kejadian.</p>
+                                </div>
                             </div>
 
-                            <div>
-                                <label for="ppe_used" class="mb-2 block text-sm font-bold text-slate-700">APD yang digunakan saat kejadian</label>
-                                <textarea id="ppe_used" name="ppe_used" rows="4" placeholder="Contoh: helm, sarung tangan, safety shoes, atau tulis tidak ada"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('ppe_used') }}</textarea>
-                                @error('ppe_used')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
+                            <div class="grid gap-6 xl:grid-cols-2">
+                                <div>
+                                    <p class="mb-3 text-sm font-bold text-slate-700">Kondisi lingkungan kerja tidak aman</p>
+                                    <div class="grid gap-3">
+                                        @foreach ($unsafeConditionOptions as $value => $label)
+                                            <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
+                                                <input type="checkbox" name="unsafe_conditions[]" value="{{ $value }}" class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]" @checked(in_array($value, $selectedUnsafeConditions, true))>
+                                                <span>{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('unsafe_conditions')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <p class="mb-3 text-sm font-bold text-slate-700">Tindakan tidak aman saat kejadian</p>
+                                    <div class="grid gap-3">
+                                        @foreach ($unsafeActionOptions as $value => $label)
+                                            <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
+                                                <input type="checkbox" name="unsafe_actions[]" value="{{ $value }}" class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]" @checked(in_array($value, $selectedUnsafeActions, true))>
+                                                <span>{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('unsafe_actions')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <div>
-                                <label for="impact" class="mb-2 block text-sm font-bold text-slate-700">Dampak langsung</label>
-                                <textarea id="impact" name="impact" rows="4" placeholder="Tuliskan cedera, kerusakan, gangguan aktivitas, atau dampak lain yang terjadi."
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('impact') }}</textarea>
-                                @error('impact')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-                    </section>
+                            <div class="mt-6 grid gap-5 md:grid-cols-2">
+                                <div>
+                                    <label for="unsafe_condition_cause" class="mb-2 block text-sm font-bold text-slate-700">Penyebab kondisi tidak aman</label>
+                                    <textarea id="unsafe_condition_cause" name="unsafe_condition_cause" rows="4"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('unsafe_condition_cause') }}</textarea>
+                                    @error('unsafe_condition_cause')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                    <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
-                        <div class="mb-5 flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
-                                <span class="material-symbols-outlined">rule</span>
-                            </span>
-                            <div>
-                                <h3 class="text-xl font-bold text-slate-900">Analisa awal kejadian</h3>
-                                <p class="text-sm text-slate-500">Pilih kondisi atau tindakan tidak aman yang terlihat saat kejadian.</p>
-                            </div>
-                        </div>
+                                <div>
+                                    <label for="unsafe_action_cause" class="mb-2 block text-sm font-bold text-slate-700">Penyebab tindakan tidak aman</label>
+                                    <textarea id="unsafe_action_cause" name="unsafe_action_cause" rows="4"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('unsafe_action_cause') }}</textarea>
+                                    @error('unsafe_action_cause')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                        <div class="grid gap-6 xl:grid-cols-2">
-                            <div>
-                                <p class="mb-3 text-sm font-bold text-slate-700">Kondisi lingkungan kerja tidak aman</p>
-                                <div class="grid gap-3">
-                                    @foreach ($unsafeConditionOptions as $value => $label)
-                                        <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
-                                            <input type="checkbox" name="unsafe_conditions[]" value="{{ $value }}" class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]" @checked(in_array($value, $selectedUnsafeConditions, true))>
-                                            <span>{{ $label }}</span>
+                                <div>
+                                    <p class="mb-2 text-sm font-bold text-slate-700">Apakah sudah diperingatkan sebelum kejadian?</p>
+                                    <div class="grid gap-3 sm:grid-cols-2">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="warning_given_before_incident" value="1" class="peer sr-only" @checked(old('warning_given_before_incident') === '1')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
                                         </label>
-                                    @endforeach
-                                </div>
-                                @error('unsafe_conditions')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <p class="mb-3 text-sm font-bold text-slate-700">Tindakan tidak aman saat kejadian</p>
-                                <div class="grid gap-3">
-                                    @foreach ($unsafeActionOptions as $value => $label)
-                                        <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
-                                            <input type="checkbox" name="unsafe_actions[]" value="{{ $value }}" class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]" @checked(in_array($value, $selectedUnsafeActions, true))>
-                                            <span>{{ $label }}</span>
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="warning_given_before_incident" value="0" class="peer sr-only" @checked(old('warning_given_before_incident') === '0')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
                                         </label>
-                                    @endforeach
+                                    </div>
                                 </div>
-                                @error('unsafe_actions')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
 
-                        <div class="mt-6 grid gap-5 md:grid-cols-2">
-                            <div>
-                                <label for="unsafe_condition_cause" class="mb-2 block text-sm font-bold text-slate-700">Penyebab kondisi tidak aman</label>
-                                <textarea id="unsafe_condition_cause" name="unsafe_condition_cause" rows="4"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('unsafe_condition_cause') }}</textarea>
-                                @error('unsafe_condition_cause')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="unsafe_action_cause" class="mb-2 block text-sm font-bold text-slate-700">Penyebab tindakan tidak aman</label>
-                                <textarea id="unsafe_action_cause" name="unsafe_action_cause" rows="4"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('unsafe_action_cause') }}</textarea>
-                                @error('unsafe_action_cause')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-sm font-bold text-slate-700">Apakah sudah diperingatkan sebelum kejadian?</p>
-                                <div class="grid gap-3 sm:grid-cols-2">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="warning_given_before_incident" value="1" class="peer sr-only" @checked(old('warning_given_before_incident') === '1')>
-                                        <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="warning_given_before_incident" value="0" class="peer sr-only" @checked(old('warning_given_before_incident') === '0')>
-                                        <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
-                                    </label>
+                                <div>
+                                    <p class="mb-2 text-sm font-bold text-slate-700">Apakah kejadian pernah terjadi sebelumnya?</p>
+                                    <div class="grid gap-3 sm:grid-cols-2">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="incident_previously_occurred" value="1" class="peer sr-only" @checked(old('incident_previously_occurred') === '1')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
+                                        </label>
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="incident_previously_occurred" value="0" class="peer sr-only" @checked(old('incident_previously_occurred') === '0')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div>
-                                <p class="mb-2 text-sm font-bold text-slate-700">Apakah kejadian pernah terjadi sebelumnya?</p>
-                                <div class="grid gap-3 sm:grid-cols-2">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="incident_previously_occurred" value="1" class="peer sr-only" @checked(old('incident_previously_occurred') === '1')>
-                                        <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="incident_previously_occurred" value="0" class="peer sr-only" @checked(old('incident_previously_occurred') === '0')>
-                                        <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                        </section>
+                    @endunless
 
                     @unless ($isPublicIncidentForm)
                         <section class="rounded-[1.6rem] bg-white p-5 ring-1 ring-slate-200 lg:p-6">
@@ -312,15 +316,6 @@
                             </div>
 
                             <div>
-                                <label for="victim_age" class="mb-2 block text-sm font-bold text-slate-700">Umur korban</label>
-                                <input id="victim_age" name="victim_age" type="number" min="0" max="120" value="{{ old('victim_age') }}"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                @error('victim_age')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
                                 <p class="mb-2 block text-sm font-bold text-slate-700">Jenis kelamin</p>
                                 <div class="grid gap-3 sm:grid-cols-2">
                                     <label class="cursor-pointer">
@@ -333,15 +328,6 @@
                                     </label>
                                 </div>
                                 @error('victim_gender')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="victim_address" class="mb-2 block text-sm font-bold text-slate-700">Alamat korban</label>
-                                <textarea id="victim_address" name="victim_address" rows="3"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">{{ old('victim_address') }}</textarea>
-                                @error('victim_address')
                                     <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -449,10 +435,10 @@
                                 @enderror
                             </div>
 
-                            <div class="md:col-span-2 hidden rounded-2xl border border-slate-200 bg-slate-50 p-4" data-incident-room-panel>
+                            <div class="md:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-4" data-incident-room-panel>
                                 <input type="hidden" name="building_key" id="incident-building-key" value="{{ old('building_key') }}">
                                 <p class="text-sm font-bold text-slate-800">Gedung, lantai, dan ruangan</p>
-                                <p class="mt-1 text-xs leading-5 text-slate-500" data-incident-room-help>Terisi setelah GPS mendeteksi area gedung. Pilih lantai lalu ruangan bila datanya tersedia.</p>
+                                <p class="mt-1 text-xs leading-5 text-slate-500" data-incident-room-help>Pilih lantai lalu ruangan bila lokasi berada di dalam area Polman dan data ruangan tersedia.</p>
                                 <div class="mt-4 grid gap-4 md:grid-cols-2">
                                     <div>
                                         <label for="incident-building-floor" class="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Lantai</label>
@@ -540,43 +526,45 @@
                                 </div>
                             @endif
 
-                            <div>
-                                <label for="incident_category_id" class="mb-2 block text-sm font-bold text-slate-700">Kategori insiden</label>
-                                <select id="incident_category_id" name="incident_category_id"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                    <option value="">Pilih kategori</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" @selected(old('incident_category_id') == $category->id)>{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('incident_category_id')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            @unless ($isPublicIncidentForm)
+                                <div>
+                                    <label for="incident_category_id" class="mb-2 block text-sm font-bold text-slate-700">Kategori insiden</label>
+                                    <select id="incident_category_id" name="incident_category_id"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
+                                        <option value="">Pilih kategori</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" @selected(old('incident_category_id') == $category->id)>{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('incident_category_id')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                            <div>
-                                <label for="severity_level" class="mb-2 block text-sm font-bold text-slate-700">Perkiraan tingkat keparahan</label>
-                                <select id="severity_level" name="severity_level"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                    <option value="">Pilih tingkat</option>
-                                    @foreach ($severityOptions as $value => $label)
-                                        <option value="{{ $value }}" @selected(old('severity_level') === $value)>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                @error('severity_level')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
+                                <div>
+                                    <label for="severity_level" class="mb-2 block text-sm font-bold text-slate-700">Perkiraan tingkat keparahan</label>
+                                    <select id="severity_level" name="severity_level"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
+                                        <option value="">Pilih tingkat</option>
+                                        @foreach ($severityOptions as $value => $label)
+                                            <option value="{{ $value }}" @selected(old('severity_level') === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('severity_level')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                            <div class="md:col-span-2">
-                                <label for="title" class="mb-2 block text-sm font-bold text-slate-700">Judul atau kondisi utama</label>
-                                <input id="title" name="title" type="text" value="{{ old('title') }}"
-                                    placeholder="Contoh: Operator mengalami luka ringan saat perawatan mesin"
-                                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
-                                @error('title')
-                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
-                                @enderror
-                            </div>
+                                <div class="md:col-span-2">
+                                    <label for="title" class="mb-2 block text-sm font-bold text-slate-700">Judul atau kondisi utama</label>
+                                    <input id="title" name="title" type="text" value="{{ old('title') }}"
+                                        placeholder="Contoh: Operator mengalami luka ringan saat perawatan mesin"
+                                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-semibold text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[var(--primary-color)] focus:bg-white focus:ring-4 focus:ring-[var(--primary-color)]/10">
+                                    @error('title')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endunless
 
                             <div class="md:col-span-2">
                                 <label for="witness_name" class="mb-2 block text-sm font-bold text-slate-700">Nama saksi bila ada</label>
@@ -777,6 +765,7 @@
             const specificLocationInput = form?.querySelector('#incident-specific-location');
             const specificLocationHelp = form?.querySelector('[data-incident-specific-location-help]');
             const roomPanel = form?.querySelector('[data-incident-room-panel]');
+            const roomHelp = roomPanel?.querySelector('[data-incident-room-help]');
             const buildingKeyInput = form?.querySelector('#incident-building-key');
             const floorSelect = form?.querySelector('#incident-building-floor');
             const roomSelect = form?.querySelector('#incident-campus-room-id');
@@ -831,6 +820,45 @@
                 Array.isArray(building.coordinates) && isPointInsidePolygon([lat, lng], building.coordinates)
             ));
 
+            const buildingByLocationName = () => {
+                const entries = new Map();
+
+                campusBuildings.forEach((building) => {
+                    entries.set(normalize(building.name), building);
+                });
+
+                return entries;
+            };
+
+            const locationBuildingMap = buildingByLocationName();
+
+            const selectedLocationName = () => {
+                if (!locationSelect) {
+                    return '';
+                }
+
+                const option = locationSelect.options[locationSelect.selectedIndex];
+                return option?.dataset.locationName || option?.textContent || '';
+            };
+
+            const setRoomControlsState = (disabled, message = null) => {
+                [floorSelect, roomSelect].forEach((select) => {
+                    if (!select) {
+                        return;
+                    }
+
+                    select.disabled = disabled;
+                    select.classList.toggle('opacity-60', disabled);
+                    select.classList.toggle('cursor-not-allowed', disabled);
+                    select.classList.toggle('bg-slate-100', disabled);
+                    select.classList.toggle('bg-white', !disabled);
+                });
+
+                if (roomHelp && message) {
+                    roomHelp.textContent = message;
+                }
+            };
+
             const selectLocationByName = (name) => {
                 if (!locationSelect) {
                     return false;
@@ -850,10 +878,7 @@
                 return true;
             };
 
-            const resetRoomSelection = () => {
-                if (roomPanel) {
-                    roomPanel.classList.add('hidden');
-                }
+            const resetRoomSelection = (disabled = false, message = 'Pilih lantai lalu ruangan bila lokasi berada di dalam area Polman dan data ruangan tersedia.') => {
                 if (buildingKeyInput) {
                     buildingKeyInput.value = '';
                 }
@@ -863,6 +888,7 @@
                 if (roomSelect) {
                     roomSelect.innerHTML = '<option value="">Pilih ruangan</option>';
                 }
+                setRoomControlsState(disabled, message);
             };
 
             const fillRooms = (buildingKey, selectedFloor = null, selectedRoomId = null) => {
@@ -872,7 +898,13 @@
 
                 const floors = campusRooms[buildingKey] || {};
                 const floorValues = Object.keys(floors).sort((a, b) => Number(a) - Number(b));
-                roomPanel.classList.remove('hidden');
+
+                if (floorValues.length === 0) {
+                    resetRoomSelection(true, 'Data lantai dan ruangan belum tersedia untuk lokasi ini.');
+                    return;
+                }
+
+                setRoomControlsState(false, 'Pilih lantai lalu ruangan yang paling sesuai dengan titik kejadian.');
                 buildingKeyInput.value = buildingKey;
                 floorSelect.innerHTML = '<option value="">Pilih lantai</option>';
                 floorValues.forEach((floor) => {
@@ -900,6 +932,33 @@
                     floorSelect.value = floorValues[0];
                 }
                 renderRoomOptions();
+            };
+
+            const updateRoomSelectionFromLocation = (useOldValues = false) => {
+                const locationName = selectedLocationName();
+                const normalizedLocation = normalize(locationName);
+
+                if (!normalizedLocation) {
+                    resetRoomSelection(true, 'Pilih lokasi kejadian terlebih dahulu untuk mengaktifkan pilihan lantai dan ruangan.');
+                    return;
+                }
+
+                if (normalizedLocation === normalize('Diluar Polman')) {
+                    resetRoomSelection(true, 'Lokasi berada di luar Polman, sehingga lantai dan ruangan tidak dapat dipilih.');
+                    showSpecificLocation('Diluar Polman', true);
+                    return;
+                }
+
+                const building = locationBuildingMap.get(normalizedLocation);
+
+                if (!building) {
+                    resetRoomSelection(true, 'Data lantai dan ruangan belum tersedia untuk lokasi ini.');
+                    showSpecificLocation(locationName, false);
+                    return;
+                }
+
+                showSpecificLocation(building.name, false);
+                fillRooms(building.key, useOldValues ? oldFloor : null, useOldValues ? oldRoomId : null);
             };
 
             const showSpecificLocation = (detectedName, isOutsidePolman = false) => {
@@ -939,7 +998,7 @@
                 }
 
                 const isOutsideSelected = selectLocationByName('Diluar Polman');
-                resetRoomSelection();
+                resetRoomSelection(true, 'Lokasi berada di luar Polman, sehingga lantai dan ruangan tidak dapat dipilih.');
                 showSpecificLocation('Diluar Polman', true);
                 status.textContent = isOutsideSelected
                     ? 'Koordinat berada di luar polygon Polman. Lokasi kejadian terisi Diluar Polman.'
@@ -979,8 +1038,10 @@
             };
 
             button.addEventListener('click', captureLocation);
+            locationSelect?.addEventListener('change', () => updateRoomSelectionFromLocation(false));
 
             if (latitudeInput.value.trim() === '' || longitudeInput.value.trim() === '') {
+                updateRoomSelectionFromLocation(true);
                 captureLocation();
             } else {
                 applyDetectedLocation(Number(latitudeInput.value), Number(longitudeInput.value));

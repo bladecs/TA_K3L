@@ -181,8 +181,8 @@
                                 <dd class="mt-2 text-sm text-slate-800">{{ $incidentReport->victim_position_description ?: '-' }}</dd>
                             </div>
                             <div>
-                                <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis kelamin / umur</dt>
-                                <dd class="mt-2 text-sm text-slate-800">{{ $incidentReport->victim_gender === 'male' ? 'Laki-laki' : ($incidentReport->victim_gender === 'female' ? 'Perempuan' : '-') }}{{ $incidentReport->victim_age ? ' / '.$incidentReport->victim_age.' tahun' : '' }}</dd>
+                                <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis kelamin</dt>
+                                <dd class="mt-2 text-sm text-slate-800">{{ $incidentReport->victim_gender === 'male' ? 'Laki-laki' : ($incidentReport->victim_gender === 'female' ? 'Perempuan' : '-') }}</dd>
                             </div>
                             <div>
                                 <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis cedera</dt>

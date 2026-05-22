@@ -252,7 +252,7 @@
                     eyebrow: 'Daftar Titik Insiden',
                     title: 'Kejadian Terpetakan',
                     highLabel: 'Insiden Berat',
-                    empty: 'Belum ada titik insiden yang memiliki koordinat GIS.',
+                    empty: 'Belum ada titik insiden yang memiliki koordinat GIS atau data ruangan.',
                     badgeKey: 'severity_level',
                     popupDetail: (marker) => `Kategori: ${escapeHtml(marker.category)}<br>Keparahan: ${escapeHtml(marker.severity_level)}<br>Status: ${escapeHtml(statusLabel(marker.status))}`,
                     listMeta: (marker) => `${escapeHtml(marker.location)} - ${escapeHtml(marker.specific_location)}`,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CampusRoomController;
 use App\Http\Controllers\Admin\EmergencyContactController;
 use App\Http\Controllers\Admin\EmergencyResponseStepController;
 use App\Http\Controllers\Admin\FirstAidGuideController;
+use App\Http\Controllers\Admin\FloorplanController;
 use App\Http\Controllers\Admin\IncidentCategoryController;
 use App\Http\Controllers\Admin\KnowledgeArticleController;
 use App\Http\Controllers\Admin\KnowledgeCategoryController;
@@ -44,6 +45,7 @@ Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->n
 
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', UserDashboardController::class)->middleware('active.user')->name('dashboard');
+    Route::view('/panduan', 'user.guide')->name('guide');
     Route::get('/emergency-center', EmergencyCenterController::class)->name('emergency.index');
     Route::get('/knowledge-center', KnowledgeCenterController::class)->name('knowledge.index');
     Route::get('/knowledge-center/module/{slug}', KnowledgeModuleController::class)->name('knowledge.show');
@@ -76,6 +78,7 @@ Route::middleware(['auth', 'active.user', 'role:admin'])->prefix('admin')->name(
     Route::resource('first-aid-guides', FirstAidGuideController::class)->except(['show']);
     Route::resource('locations', LocationController::class)->except(['show']);
     Route::resource('campus-rooms', CampusRoomController::class)->except(['show']);
+    Route::resource('floorplans', FloorplanController::class);
     Route::resource('incident-categories', IncidentCategoryController::class)->except(['show']);
     Route::resource('knowledge-categories', KnowledgeCategoryController::class)->except(['show']);
     Route::resource('knowledge-articles', KnowledgeArticleController::class)->except(['show']);

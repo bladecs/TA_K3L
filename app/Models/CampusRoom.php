@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CampusRoom extends Model
 {
@@ -23,5 +24,10 @@ class CampusRoom extends Model
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function floorplanRooms(): HasMany
+    {
+        return $this->hasMany(FloorplanRoom::class);
     }
 }

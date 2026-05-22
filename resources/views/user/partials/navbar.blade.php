@@ -22,6 +22,11 @@
                 <span class="material-symbols-outlined text-[var(--primary-color)]">timeline</span>
                 <span class="font-bold text-[var(--primary-color)]">Cek Status</span>
             </a>
+            <a href="{{ route('user.guide') }}"
+                class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('user.guide') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
+                <span class="material-symbols-outlined text-[var(--primary-color)]">help</span>
+                <span class="font-bold text-[var(--primary-color)]">Panduan</span>
+            </a>
             <a href="{{ route('user.knowledge.index') }}"
                 class="flex flex-row items-center gap-2 rounded-xl px-4 py-3 text-sm transition {{ request()->routeIs('user.knowledge.*') ? 'bg-white shadow-sm' : 'hover:bg-white/80' }}">
                 <span class="material-symbols-outlined text-[var(--primary-color)]">book_5</span>
@@ -71,6 +76,10 @@
                         <a href="{{ route('user.incidents.status') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)]">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">timeline</span>
                             Cek Status
+                        </a>
+                        <a href="{{ route('user.guide') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)]">
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">help</span>
+                            Panduan
                         </a>
                         <a href="{{ route('user.incidents.create') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)]">
                             <span class="material-symbols-outlined text-[var(--primary-color)]">contract_edit</span>

@@ -65,6 +65,13 @@
             'lain_lain' => 'Lain-lain',
         ];
         $labels = fn (?array $values, array $options) => collect($values ?? [])->map(fn ($value) => $options[$value] ?? $value)->implode(', ') ?: '-';
+        $selectedUnsafeConditions = old('unsafe_conditions', $incidentReport->unsafe_conditions ?? []);
+        $selectedUnsafeActions = old('unsafe_actions', $incidentReport->unsafe_actions ?? []);
+        $selectedPreventions = old('proposed_preventions', $incidentReport->proposed_preventions ?? []);
+        $selectedWarningGiven = old('warning_given_before_incident', $incidentReport->warning_given_before_incident);
+        $selectedPreviouslyOccurred = old('incident_previously_occurred', $incidentReport->incident_previously_occurred);
+        $selectedWarningGiven = is_bool($selectedWarningGiven) ? ($selectedWarningGiven ? '1' : '0') : (string) $selectedWarningGiven;
+        $selectedPreviouslyOccurred = is_bool($selectedPreviouslyOccurred) ? ($selectedPreviouslyOccurred ? '1' : '0') : (string) $selectedPreviouslyOccurred;
     @endphp
 
     <section class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -168,15 +175,15 @@
             </div>
 
             <div class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
-                <h3 class="text-lg font-semibold text-slate-900">Data Investigasi dari Pelapor</h3>
+                <h3 class="text-lg font-semibold text-slate-900">Data Investigasi dan Analisa</h3>
                 <div class="mt-6 grid gap-5 sm:grid-cols-2 text-sm">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Posisi korban</p>
                         <p class="mt-2 text-slate-800">{{ $victimPositions[$incidentReport->victim_position] ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis kelamin / umur</p>
-                        <p class="mt-2 text-slate-800">{{ $incidentReport->victim_gender === 'male' ? 'Laki-laki' : ($incidentReport->victim_gender === 'female' ? 'Perempuan' : '-') }}{{ $incidentReport->victim_age ? ' / '.$incidentReport->victim_age.' tahun' : '' }}</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis kelamin</p>
+                        <p class="mt-2 text-slate-800">{{ $incidentReport->victim_gender === 'male' ? 'Laki-laki' : ($incidentReport->victim_gender === 'female' ? 'Perempuan' : '-') }}</p>
                     </div>
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Jenis cedera</p>
@@ -243,6 +250,58 @@
                                 placeholder="Tambahkan catatan verifikasi, temuan awal, atau arahan tindak lanjut.">{{ old('verification_note') }}</textarea>
                         </div>
 
+                        <div class="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Klasifikasi final Satgas</p>
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Lengkapi bagian ini karena user tidak lagi diminta menentukan kategori, tingkat keparahan, atau judul laporan.
+                                </p>
+                            </div>
+
+                            <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                                <div class="sm:col-span-2">
+                                    <label for="title" class="mb-2 block text-sm font-semibold text-slate-800">Judul atau kondisi utama</label>
+                                    <input id="title" name="title" type="text"
+                                        value="{{ old('title', $incidentReport->title) }}"
+                                        placeholder="Contoh: Luka ringan saat perawatan mesin"
+                                        class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                                    @error('title')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="incident_category_id" class="mb-2 block text-sm font-semibold text-slate-800">Kategori insiden</label>
+                                    <select id="incident_category_id" name="incident_category_id"
+                                        class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                                        <option value="">Belum ditentukan</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" @selected(old('incident_category_id', $incidentReport->incident_category_id) == $category->id)>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('incident_category_id')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="severity_level" class="mb-2 block text-sm font-semibold text-slate-800">Tingkat keparahan</label>
+                                    <select id="severity_level" name="severity_level"
+                                        class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40">
+                                        <option value="">Belum ditentukan</option>
+                                        @foreach (['low' => 'Rendah', 'medium' => 'Sedang', 'high' => 'Tinggi', 'critical' => 'Kritis'] as $value => $label)
+                                            <option value="{{ $value }}" @selected(old('severity_level', $incidentReport->severity_level) === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('severity_level')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label for="injury_category_id" class="mb-2 block text-sm font-semibold text-slate-800">Kategori cedera</label>
@@ -285,6 +344,134 @@
                             @error('impact')
                                 <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
                             @enderror
+                        </div>
+
+                        <div class="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Analisa awal kejadian oleh Satgas</p>
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Lengkapi bagian ini berdasarkan hasil verifikasi, wawancara, atau pengamatan lapangan karena tidak lagi diisi oleh user.
+                                </p>
+                            </div>
+
+                            <div class="mt-4 grid gap-5">
+                                <div>
+                                    <p class="mb-3 text-sm font-semibold text-slate-800">Kondisi lingkungan kerja tidak aman</p>
+                                    <div class="grid gap-3">
+                                        @foreach ($unsafeConditionOptions as $value => $label)
+                                            <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                                                <input type="checkbox" name="unsafe_conditions[]" value="{{ $value }}"
+                                                    class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                                                    @checked(in_array($value, $selectedUnsafeConditions, true))>
+                                                <span>{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('unsafe_conditions')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <p class="mb-3 text-sm font-semibold text-slate-800">Tindakan tidak aman saat kejadian</p>
+                                    <div class="grid gap-3">
+                                        @foreach ($unsafeActionOptions as $value => $label)
+                                            <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                                                <input type="checkbox" name="unsafe_actions[]" value="{{ $value }}"
+                                                    class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                                                    @checked(in_array($value, $selectedUnsafeActions, true))>
+                                                <span>{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('unsafe_actions')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label for="unsafe_condition_cause" class="mb-2 block text-sm font-semibold text-slate-800">Penyebab kondisi tidak aman</label>
+                                    <textarea id="unsafe_condition_cause" name="unsafe_condition_cause" rows="4"
+                                        class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
+                                        placeholder="Contoh: area belum diberi rambu, lantai basah, alat rusak.">{{ old('unsafe_condition_cause', $incidentReport->unsafe_condition_cause) }}</textarea>
+                                    @error('unsafe_condition_cause')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="unsafe_action_cause" class="mb-2 block text-sm font-semibold text-slate-800">Penyebab tindakan tidak aman</label>
+                                    <textarea id="unsafe_action_cause" name="unsafe_action_cause" rows="4"
+                                        class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
+                                        placeholder="Contoh: tidak memakai APD, kurang instruksi kerja, terburu-buru.">{{ old('unsafe_action_cause', $incidentReport->unsafe_action_cause) }}</textarea>
+                                    @error('unsafe_action_cause')
+                                        <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <p class="mb-2 text-sm font-semibold text-slate-800">Apakah sudah diperingatkan sebelum kejadian?</p>
+                                    <div class="grid gap-3 sm:grid-cols-2">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="warning_given_before_incident" value="1" class="peer sr-only" @checked((string) $selectedWarningGiven === '1')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
+                                        </label>
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="warning_given_before_incident" value="0" class="peer sr-only" @checked((string) $selectedWarningGiven === '0')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="mb-2 text-sm font-semibold text-slate-800">Apakah kejadian pernah terjadi sebelumnya?</p>
+                                    <div class="grid gap-3 sm:grid-cols-2">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="incident_previously_occurred" value="1" class="peer sr-only" @checked((string) $selectedPreviouslyOccurred === '1')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Ya</span>
+                                        </label>
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="incident_previously_occurred" value="0" class="peer sr-only" @checked((string) $selectedPreviouslyOccurred === '0')>
+                                            <span class="flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--blue-low-opacity)] peer-checked:text-[var(--primary-color)]">Tidak</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Usulan pencegahan oleh Satgas</p>
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Pilih langkah pencegahan awal dan tambahkan rencana tindakan agar kejadian serupa tidak terulang.
+                                </p>
+                            </div>
+
+                            <div class="mt-4 grid gap-3">
+                                @foreach ($preventionOptions as $value => $label)
+                                    <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                                        <input type="checkbox" name="proposed_preventions[]" value="{{ $value }}"
+                                            class="mt-1 rounded border-slate-300 text-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                                            @checked(in_array($value, $selectedPreventions, true))>
+                                        <span>{{ $label }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                            @error('proposed_preventions')
+                                <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                            @enderror
+
+                            <div class="mt-5">
+                                <label for="prevention_action_plan" class="mb-2 block text-sm font-semibold text-slate-800">Rencana tindakan pencegahan</label>
+                                <textarea id="prevention_action_plan" name="prevention_action_plan" rows="4"
+                                    class="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--blue-low-opacity)]/40"
+                                    placeholder="Tuliskan tindakan pengamanan, perbaikan, pelatihan, inspeksi, atau perubahan prosedur yang diperlukan.">{{ old('prevention_action_plan', $incidentReport->prevention_action_plan) }}</textarea>
+                                @error('prevention_action_plan')
+                                    <p class="mt-2 text-sm font-medium text-rose-600">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">

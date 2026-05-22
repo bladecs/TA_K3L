@@ -23,29 +23,10 @@
                         <span class="material-symbols-outlined">timeline</span>
                         Cek Status
                     </a>
-                </div>
-            </div>
-
-            <div class="section-shell rounded-[2rem] p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-1 ring-white/70 sm:p-6">
-                <p class="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--primary-color)]">Layanan Utama</p>
-                <div class="mt-5 grid gap-3">
-                    @foreach ([
-                        ['icon' => 'health_and_safety', 'title' => 'Respons keselamatan', 'text' => 'Informasi darurat dan kontak penting tersedia tanpa login.'],
-                        ['icon' => 'mark_email_unread', 'title' => 'Notifikasi status', 'text' => 'Nomor laporan dikirim dan dapat dipantau memakai kontak pelapor.'],
-                        ['icon' => 'school', 'title' => 'Edukasi K3', 'text' => 'Materi keselamatan dipublikasikan untuk mendukung budaya kerja aman.'],
-                    ] as $item)
-                        <div class="rounded-[1.4rem] bg-white px-4 py-4 ring-1 ring-slate-200">
-                            <div class="flex gap-3">
-                                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--blue-low-opacity)] text-[var(--primary-color)]">
-                                    <span class="material-symbols-outlined">{{ $item['icon'] }}</span>
-                                </span>
-                                <div>
-                                    <h3 class="font-bold text-slate-900">{{ $item['title'] }}</h3>
-                                    <p class="mt-1 text-sm leading-6 text-slate-500">{{ $item['text'] }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    <a href="{{ route('user.guide') }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/20">
+                        <span class="material-symbols-outlined">help</span>
+                        Panduan
+                    </a>
                 </div>
             </div>
         </div>
@@ -83,21 +64,6 @@
                 </article>
             </section>
         @endisset
-
-        <section class="mx-auto grid w-full max-w-[1360px] gap-5 px-4 py-12 sm:px-6 lg:grid-cols-3 lg:px-10">
-            @foreach ([
-                ['route' => route('user.emergency.index'), 'icon' => 'emergency_home', 'title' => 'Pusat Darurat', 'color' => 'bg-white'],
-                ['route' => route('user.incidents.create'), 'icon' => 'contract_edit', 'title' => 'Form Laporan', 'color' => 'bg-white'],
-                ['route' => route('user.knowledge.index'), 'icon' => 'book_5', 'title' => 'Materi K3', 'color' => 'bg-white'],
-            ] as $action)
-                <a href="{{ $action['route'] }}"
-                    class="{{ $action['color'] }} flex min-h-32 items-center gap-4 rounded-[1.4rem] border-2 p-5 shadow-[0_16px_36px_rgba(15,23,42,0.12)] transition hover:-translate-y-1"
-                    style="border-color: var(--primary-color);">
-                    <span class="material-symbols-outlined text-4xl" style="color: var(--primary-color);">{{ $action['icon'] }}</span>
-                    <span class="text-xl font-bold" style="color: var(--primary-color);">{{ $action['title'] }}</span>
-                </a>
-            @endforeach
-        </section>
 
         @include('user.hazards.partials.public-gis-section')
 

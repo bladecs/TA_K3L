@@ -3,19 +3,32 @@
         ['route' => 'satgas.dashboard', 'active' => ['satgas.dashboard'], 'icon' => 'home_app_logo', 'label' => 'Dashboard'],
         ['route' => 'satgas.incidents.index', 'active' => ['satgas.incidents.index', 'satgas.incidents.show', 'satgas.incidents.create'], 'icon' => 'fact_check', 'label' => 'Review Insiden'],
         ['route' => 'satgas.hazards.index', 'active' => ['satgas.hazards.index', 'satgas.hazards.show', 'satgas.hazards.create'], 'icon' => 'warning', 'label' => 'Review Hazard'],
-        ['route' => 'satgas.hazards.map', 'active' => ['satgas.hazards.map'], 'icon' => 'map', 'label' => 'GIS Hazard'],
-        ['route' => 'satgas.incidents.gis', 'active' => ['satgas.incidents.gis', 'satgas.incidents.gis.export'], 'icon' => 'satellite_alt', 'label' => 'GIS Insiden'],
-        ['route' => 'satgas.knowledge-articles.index', 'active' => ['satgas.knowledge-articles.*'], 'icon' => 'menu_book', 'label' => 'Knowledge'],
     ];
 
-    $extraLinks = [
-        ['route' => 'satgas.profile.show', 'active' => ['satgas.profile.*'], 'icon' => 'account_circle', 'label' => 'Profil Satgas'],
-        ['route' => 'satgas.incidents.create', 'active' => ['satgas.incidents.create'], 'icon' => 'note_add', 'label' => 'Buat Laporan Insiden'],
-        ['route' => 'satgas.hazards.create', 'active' => ['satgas.hazards.create'], 'icon' => 'add_alert', 'label' => 'Buat Hazard Report'],
-        ['route' => 'satgas.knowledge-articles.create', 'active' => ['satgas.knowledge-articles.create'], 'icon' => 'edit_square', 'label' => 'Tambah Materi'],
+    $dropdownGroups = [
+        [
+            'title' => 'Pemetaan & Materi',
+            'links' => [
+                ['route' => 'satgas.hazards.map', 'active' => ['satgas.hazards.map'], 'icon' => 'map', 'label' => 'GIS Hazard'],
+                ['route' => 'satgas.incidents.gis', 'active' => ['satgas.incidents.gis', 'satgas.incidents.gis.export'], 'icon' => 'satellite_alt', 'label' => 'GIS Insiden'],
+                ['route' => 'satgas.knowledge-articles.index', 'active' => ['satgas.knowledge-articles.*'], 'icon' => 'menu_book', 'label' => 'Knowledge'],
+            ],
+        ],
+        [
+            'title' => 'Aksi Satgas',
+            'links' => [
+                ['route' => 'satgas.profile.show', 'active' => ['satgas.profile.*'], 'icon' => 'account_circle', 'label' => 'Profil Satgas'],
+                ['route' => 'satgas.incidents.create', 'active' => ['satgas.incidents.create'], 'icon' => 'note_add', 'label' => 'Buat Laporan Insiden'],
+                ['route' => 'satgas.hazards.create', 'active' => ['satgas.hazards.create'], 'icon' => 'add_alert', 'label' => 'Buat Hazard Report'],
+                ['route' => 'satgas.knowledge-articles.create', 'active' => ['satgas.knowledge-articles.create'], 'icon' => 'edit_square', 'label' => 'Tambah Materi'],
+            ],
+        ],
     ];
 
     $isActive = fn (array $patterns): bool => collect($patterns)->contains(fn ($pattern) => request()->routeIs($pattern));
+    $dropdownIsActive = collect($dropdownGroups)
+        ->flatMap(fn ($group) => $group['links'])
+        ->contains(fn ($link) => $isActive($link['active']));
 @endphp
 
 <div id="satgas-floating-navbar" class="fixed inset-x-0 top-0 z-[99] flex w-full justify-center px-3 pt-3 transition-all duration-300 ease-out translate-y-0 opacity-100 sm:px-4 sm:pt-4">
@@ -42,31 +55,40 @@
 
         <div class="hidden items-center justify-center gap-3 lg:flex">
             <details class="group relative">
-                <summary class="flex h-12 w-12 cursor-pointer list-none items-center justify-center rounded-xl transition hover:bg-[var(--blue-low-opacity)] [&::-webkit-details-marker]:hidden">
+                <summary class="{{ $dropdownIsActive ? 'bg-white shadow-sm' : 'hover:bg-[var(--blue-low-opacity)]' }} flex h-12 w-12 cursor-pointer list-none items-center justify-center rounded-xl transition [&::-webkit-details-marker]:hidden">
                     <span class="material-symbols-outlined text-[var(--primary-color)]">more_vert</span>
                 </summary>
 
-                <div class="ambient-card absolute right-0 top-16 w-72 rounded-3xl p-3 shadow-all ring-1 ring-slate-100">
+                <div class="ambient-card absolute right-0 top-16 w-[42rem] max-w-[calc(100vw-2rem)] rounded-3xl p-4 shadow-all ring-1 ring-slate-100">
                     <div class="px-3 py-2">
                         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Menu Satgas</p>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        @foreach ($extraLinks as $link)
-                            <a href="{{ route($link['route']) }}"
-                                class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ $isActive($link['active']) ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
-                                <span class="material-symbols-outlined text-[var(--primary-color)]">{{ $link['icon'] }}</span>
-                                {{ $link['label'] }}
-                            </a>
+                    <div class="grid grid-cols-2 gap-4">
+                        @foreach ($dropdownGroups as $group)
+                            <div class="min-w-0 rounded-2xl bg-white/60 p-2 ring-1 ring-slate-100">
+                                <p class="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-400">{{ $group['title'] }}</p>
+                                <div class="grid gap-1.5">
+                                    @foreach ($group['links'] as $link)
+                                        <a href="{{ route($link['route']) }}"
+                                            class="flex min-h-12 items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ $isActive($link['active']) ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                                            <span class="material-symbols-outlined shrink-0 text-[22px] text-[var(--primary-color)]">{{ $link['icon'] }}</span>
+                                            <span class="min-w-0 leading-5">{{ $link['label'] }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
                         @endforeach
 
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-rose-600 transition hover:bg-rose-50">
-                                <span class="material-symbols-outlined">logout</span>
-                                Keluar
-                            </button>
-                        </form>
+                        <div class="col-span-2">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="flex min-h-12 w-full items-center justify-center gap-3 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-bold text-rose-600 transition hover:bg-rose-100">
+                                    <span class="material-symbols-outlined text-[21px]">logout</span>
+                                    Keluar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </details>
@@ -118,12 +140,14 @@
                 <div class="min-w-0">
                     <p class="mb-2 px-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-400">Aksi</p>
                     <div class="flex flex-col gap-1.5">
-                        @foreach ($extraLinks as $link)
-                            <a href="{{ route($link['route']) }}"
-                                class="flex min-h-12 items-center gap-3 rounded-2xl bg-white/70 px-4 py-2 text-xs font-bold leading-4 text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ $isActive($link['active']) ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
-                                <span class="material-symbols-outlined shrink-0 text-[21px] text-[var(--primary-color)]">{{ $link['icon'] }}</span>
-                                <span class="min-w-0 break-words">{{ $link['label'] }}</span>
-                            </a>
+                        @foreach ($dropdownGroups as $group)
+                            @foreach ($group['links'] as $link)
+                                <a href="{{ route($link['route']) }}"
+                                    class="flex min-h-12 items-center gap-3 rounded-2xl bg-white/70 px-4 py-2 text-xs font-bold leading-4 text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ $isActive($link['active']) ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                                    <span class="material-symbols-outlined shrink-0 text-[21px] text-[var(--primary-color)]">{{ $link['icon'] }}</span>
+                                    <span class="min-w-0 break-words">{{ $link['label'] }}</span>
+                                </a>
+                            @endforeach
                         @endforeach
 
                         <form action="{{ route('logout') }}" method="POST">

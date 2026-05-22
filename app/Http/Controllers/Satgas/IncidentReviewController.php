@@ -156,6 +156,7 @@ class IncidentReviewController extends Controller
 
         $injuryCategories = InjuryCategory::query()->orderBy('name')->get();
         $bodyParts = BodyPart::query()->orderBy('name')->get();
+        $categories = IncidentCategory::query()->orderBy('name')->get();
         $locations = Location::query()
             ->where('is_active', true)
             ->orderBy('name')
@@ -190,6 +191,7 @@ class IncidentReviewController extends Controller
             'assignableUsers',
             'injuryCategories',
             'bodyParts',
+            'categories',
             'locations',
             'campusBuildingPolygons',
         ));
@@ -202,9 +204,20 @@ class IncidentReviewController extends Controller
             $request->user()->id,
             $request->string('verification_note')->toString() ?: null,
             $request->safe()->only([
+                'title',
+                'incident_category_id',
+                'severity_level',
                 'injury_category_id',
                 'body_part_id',
                 'impact',
+                'unsafe_conditions',
+                'unsafe_actions',
+                'unsafe_condition_cause',
+                'unsafe_action_cause',
+                'warning_given_before_incident',
+                'incident_previously_occurred',
+                'proposed_preventions',
+                'prevention_action_plan',
                 'verified_location_id',
                 'verified_specific_location',
                 'verified_latitude',

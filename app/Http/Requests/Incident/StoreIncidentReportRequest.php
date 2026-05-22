@@ -4,6 +4,7 @@ namespace App\Http\Requests\Incident;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class StoreIncidentReportRequest extends FormRequest
 {
@@ -92,6 +93,17 @@ class StoreIncidentReportRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        if (blank($this->input('title'))) {
+            $chronology = Str::squish((string) $this->input('chronology'));
+            $generatedTitle = $chronology !== ''
+                ? Str::limit($chronology, 120, '')
+                : 'Laporan insiden';
+
+            $this->merge([
+                'title' => $generatedTitle,
+            ]);
+        }
+
         if ($this->user()) {
             $phone = $this->user()->phone;
             $whatsapp = $this->input('reporter_whatsapp') ?: (

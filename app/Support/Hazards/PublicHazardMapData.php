@@ -118,8 +118,10 @@ class PublicHazardMapData
 
     protected function incidentMarkers()
     {
+        $buildingPolygons = collect($this->campusBuildingPolygons())->keyBy('key');
+
         return IncidentReport::query()
-            ->with(['category', 'location', 'verifiedLocation'])
+            ->with(['category', 'location', 'verifiedLocation', 'campusRoom'])
             ->where(function ($query) {
                 $query
                     ->where(function ($subQuery) {
@@ -127,32 +129,75 @@ class PublicHazardMapData
                     })
                     ->orWhere(function ($subQuery) {
                         $subQuery->whereNotNull('latitude')->whereNotNull('longitude');
+                    })
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->whereNotNull('campus_room_id')->whereNotNull('building_key');
                     });
             })
             ->latest('incident_date')
             ->limit(500)
             ->get()
-            ->map(function (IncidentReport $report) {
+            ->map(function (IncidentReport $report) use ($buildingPolygons) {
                 $latitude = $report->verified_latitude ?? $report->latitude;
                 $longitude = $report->verified_longitude ?? $report->longitude;
+                $buildingKey = $report->building_key ?? $report->campusRoom?->building_key;
+                $floor = $report->building_floor ?? $report->campusRoom?->floor;
+                $roomName = $report->campusRoom?->name;
+                $mapSource = 'gps';
+
+                if (($latitude === null || $longitude === null) && $buildingKey) {
+                    $center = $this->buildingCenter($buildingPolygons->get($buildingKey)['coordinates'] ?? []);
+                    $latitude = $center[0] ?? null;
+                    $longitude = $center[1] ?? null;
+                    $mapSource = 'building_room';
+                }
+
+                if ($latitude === null || $longitude === null) {
+                    return null;
+                }
+
                 $locationName = $report->verifiedLocation?->name ?? $report->location?->name ?? '-';
+                $specificLocation = $report->verified_specific_location ?? $report->specific_location ?? '-';
+
+                if ($roomName) {
+                    $specificLocation = trim(($floor ? 'Lantai ' . $floor . ' - ' : '') . $roomName);
+                }
 
                 return [
                     'id' => $report->id,
                     'report_number' => $report->report_number,
                     'title' => $report->title,
                     'location' => $locationName,
-                    'specific_location' => $report->verified_specific_location ?? $report->specific_location ?? '-',
+                    'specific_location' => $specificLocation,
                     'category' => $report->category?->name ?? '-',
                     'severity_level' => $report->severity_level ?: 'medium',
                     'status' => $report->status,
                     'incident_date' => optional($report->incident_date)->format('d M Y'),
                     'latitude' => (float) $latitude,
                     'longitude' => (float) $longitude,
+                    'building_key' => $buildingKey,
+                    'floor' => $floor,
+                    'campus_room_id' => $report->campus_room_id,
+                    'map_source' => $mapSource,
                     'scope' => $locationName === 'Diluar Polman' ? 'outside' : 'inside',
                 ];
             })
+            ->filter()
             ->values();
+    }
+
+    protected function buildingCenter(array $coordinates): ?array
+    {
+        if ($coordinates === []) {
+            return null;
+        }
+
+        $points = collect($coordinates);
+
+        return [
+            $points->avg(fn (array $point) => (float) $point[0]),
+            $points->avg(fn (array $point) => (float) $point[1]),
+        ];
     }
 
     public function campusBuildingPolygons(): array

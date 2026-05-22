@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-20T04:15:06.133Z",
+  "generated_at": "2026-05-22T00:19:56.495Z",
   "base_url": "http://127.0.0.1:8000",
-  "total": 18,
-  "passed": 18,
+  "total": 22,
+  "passed": 22,
   "failed": 0,
   "results": [
     {
@@ -19,14 +19,25 @@
     },
     {
       "role": "public",
+      "name": "public-dashboard-gis",
+      "path": "/user/dashboard#peta-gis-hazard",
+      "finalUrl": "http://127.0.0.1:8000/user/dashboard#peta-gis-hazard",
+      "expectedText": [
+        "Daftar Titik Rawan",
+        "Denah Kampus"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/public-dashboard-gis.png"
+    },
+    {
+      "role": "public",
       "name": "public-incident-form",
       "path": "/user/incidents/create",
       "finalUrl": "http://127.0.0.1:8000/user/incidents/create",
       "expectedText": [
         "Form Pelaporan K3L",
-        "Data korban",
-        "Analisa awal kejadian",
-        "Usulan pencegahan"
+        "Form Insiden",
+        "Identitas pelapor"
       ],
       "status": "passed",
       "screenshot": "ui-screenshots/public-incident-form.png"
@@ -193,6 +204,40 @@
       ],
       "status": "passed",
       "screenshot": "ui-screenshots/admin-incident-categories.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-campus-rooms",
+      "path": "/admin/campus-rooms",
+      "finalUrl": "http://127.0.0.1:8000/admin/campus-rooms",
+      "expectedText": [
+        "Ruangan per Gedung"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-campus-rooms.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-floorplans",
+      "path": "/admin/floorplans",
+      "finalUrl": "http://127.0.0.1:8000/admin/floorplans",
+      "expectedText": [
+        "Denah per Gedung dan Lantai"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-floorplans.png"
+    },
+    {
+      "role": "admin",
+      "name": "admin-floorplan-create",
+      "path": "/admin/floorplans/create",
+      "finalUrl": "http://127.0.0.1:8000/admin/floorplans/create",
+      "expectedText": [
+        "Koordinat Ruangan",
+        "Generate Denah"
+      ],
+      "status": "passed",
+      "screenshot": "ui-screenshots/admin-floorplan-create.png"
     },
     {
       "role": "admin",

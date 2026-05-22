@@ -62,6 +62,7 @@ const request = (name, method, url, testScript, body = null) => ({
 });
 
 const get = (name, url, codes = [200]) => request(name, 'GET', url, ok(name, codes));
+const getWithTests = (name, url, codes = [200], extraTests = '') => request(name, 'GET', url, `${ok(name, codes)}\n${extraTests}`);
 const mutate = (name, method, url, params, codes = [200, 302], extraTests = '') => request(
   name,
   method,
@@ -76,6 +77,11 @@ const idMatch = locationHeader.match(${pattern});
 if (idMatch) {
   pm.environment.set('${variable}', idMatch[1]);
 }
+`;
+
+const bodyContains = (...needles) => `
+var responseBody = pm.response.text();
+${needles.map((needle) => `pm.test('Memuat teks: ${needle}', () => pm.expect(responseBody).to.include('${needle}'));`).join('\n')}
 `;
 
 const login = (role, loginValue) => [
@@ -96,7 +102,7 @@ const publicItems = [
   get('Root redirect portal', '/', [200, 302]),
   get('Halaman login', '/login'),
   get('Halaman register', '/register'),
-  get('Dashboard publik', '/user/dashboard'),
+  getWithTests('Dashboard publik', '/user/dashboard', [200], bodyContains('Daftar Titik Insiden', 'Denah Kampus')),
   get('Emergency center publik', '/user/emergency-center'),
   get('Knowledge center publik', '/user/knowledge-center'),
   get('Detail knowledge publik', '/user/knowledge-center/module/{{knowledge_slug}}', [200, 404]),
@@ -111,6 +117,9 @@ const publicItems = [
     hazard_type: 'listrik',
     location_id: '{{location_id}}',
     specific_location: 'Ruang praktikum lantai 1',
+    latitude: '-6.8774225',
+    longitude: '107.6207125',
+    location_accuracy: '12',
     notes: 'Kabel terlihat terkelupas dan berpotensi tersentuh pengguna.',
   }, [200, 302]),
   get('Form insiden publik', '/user/incidents/create'),
@@ -187,6 +196,31 @@ const adminItems = [
     name: `Kategori Test ${timestamp}`,
     description: 'Kategori untuk pengujian sistem.',
   }),
+  get('Daftar ruangan gedung', '/admin/campus-rooms'),
+  get('Form tambah ruangan gedung', '/admin/campus-rooms/create'),
+  getWithTests('Daftar denah gedung', '/admin/floorplans', [200], bodyContains('Denah per Gedung dan Lantai')),
+  get('Form buat denah gedung', '/admin/floorplans/create'),
+  get('Preview denah gedung aman', '/admin/floorplans/{{floorplan_id}}', [200, 404]),
+  get('Edit denah gedung aman', '/admin/floorplans/{{floorplan_id}}/edit', [200, 404]),
+  mutate('Generate denah gedung aman', 'POST', '/admin/floorplans', {
+    _token: '{{csrf_token}}',
+    name: `Denah Newman ${timestamp}`,
+    location_id: '{{location_id}}',
+    building_key: 'gedung-teori',
+    floor: '9',
+    version: '1',
+    canvas_width: '420',
+    canvas_height: '260',
+    is_active: '1',
+    'rooms[0][campus_room_id]': '{{campus_room_id}}',
+    'rooms[0][shape_type]': 'rect',
+    'rooms[0][coordinates]': '{"x":40,"y":40,"width":160,"height":90}',
+    'rooms[0][label]': 'Ruang Newman',
+    'rooms[0][default_fill_color]': '#e5e7eb',
+    'rooms[0][incident_fill_color]': '#ef4444',
+    'rooms[0][hazard_fill_color]': '#f59e0b',
+    'rooms[0][sort_order]': '1',
+  }, [200, 302, 422]),
   get('Monitoring hazard admin', '/admin/hazards'),
   get('Detail hazard monitoring aman', '/admin/hazards/{{hazard_id}}', [200, 404]),
   get('Daftar kategori knowledge', '/admin/knowledge-categories'),
@@ -319,6 +353,9 @@ const satgasItems = [
     hazard_type: 'lingkungan',
     location_id: '{{location_id}}',
     specific_location: 'Koridor workshop',
+    latitude: '-6.8774225',
+    longitude: '107.6207125',
+    location_accuracy: '12',
     notes: 'Area koridor perlu diberi tanda peringatan.',
   }, [200, 302], captureIdFromLocation('hazard_id', '/\\/satgas\\/hazards\\/(\\d+)/')),
   get('Peta hazard satgas', '/satgas/hazards/map'),
@@ -402,6 +439,8 @@ const environment = {
     { key: 'incident_id', value: '1', enabled: true },
     { key: 'hazard_id', value: '1', enabled: true },
     { key: 'incident_report_number', value: 'INC-0001', enabled: true },
+    { key: 'campus_room_id', value: '1', enabled: true },
+    { key: 'floorplan_id', value: '1', enabled: true },
   ],
 };
 

@@ -1,0 +1,5124 @@
+{
+  "info": {
+    "name": "Sistem Informasi K3L - Web Route Functional Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Pengujian fungsi web route Sistem Informasi K3L menggunakan Newman. Request mencakup fitur publik, admin, satgas, dan hak akses."
+  },
+  "item": [
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Root redirect portal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Root redirect portal', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": []
+            }
+          }
+        },
+        {
+          "name": "Halaman login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Halaman login', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Halaman register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Halaman register', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dashboard publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Dashboard publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}",
+                  "",
+                  "",
+                  "",
+                  "var responseBody = pm.response.text();",
+                  "pm.test('Memuat teks: Daftar Titik Insiden', () => pm.expect(responseBody).to.include('Daftar Titik Insiden'));",
+                  "pm.test('Memuat teks: Denah Kampus', () => pm.expect(responseBody).to.include('Denah Kampus'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Emergency center publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Emergency center publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/emergency-center",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "emergency-center"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Knowledge center publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Knowledge center publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/knowledge-center",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "knowledge-center"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail knowledge publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Detail knowledge publik', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/knowledge-center/module/{{knowledge_slug}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "knowledge-center",
+                "module",
+                "{{knowledge_slug}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Peta GIS publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Peta GIS publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/hazard-map",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "hazard-map"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form hazard publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form hazard publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/hazard-reports/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "hazard-reports",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit hazard publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Submit hazard publik', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/hazard-reports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "hazard-reports"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_name",
+                  "value": "Pelapor Umum",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_email",
+                  "value": "pelapor.hazard.{{$timestamp}}@example.test",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_whatsapp",
+                  "value": "081234567890",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Hazard publik {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "hazard_type",
+                  "value": "listrik",
+                  "type": "text"
+                },
+                {
+                  "key": "location_id",
+                  "value": "{{location_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "specific_location",
+                  "value": "Ruang praktikum lantai 1",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "-6.8774225",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "107.6207125",
+                  "type": "text"
+                },
+                {
+                  "key": "location_accuracy",
+                  "value": "12",
+                  "type": "text"
+                },
+                {
+                  "key": "notes",
+                  "value": "Kabel terlihat terkelupas dan berpotensi tersentuh pengguna.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Form insiden publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form insiden publik', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit insiden publik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Submit insiden publik', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}",
+                  "",
+                  "",
+                  "",
+                  "const locationHeader = pm.response.headers.get('Location') || '';",
+                  "const idMatch = locationHeader.match(/\\/user\\/incidents\\/(\\d+)/);",
+                  "if (idMatch) {",
+                  "  pm.environment.set('incident_id', idMatch[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_name",
+                  "value": "Pelapor Umum",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_email",
+                  "value": "pelapor.insiden.{{$timestamp}}@example.test",
+                  "type": "text"
+                },
+                {
+                  "key": "reporter_whatsapp",
+                  "value": "081234567890",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Insiden publik {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_category_id",
+                  "value": "{{incident_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "injury_category_id",
+                  "value": "{{injury_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "body_part_id",
+                  "value": "{{body_part_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "location_id",
+                  "value": "{{location_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_date",
+                  "value": "2026-05-01",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_time",
+                  "value": "09:30",
+                  "type": "text"
+                },
+                {
+                  "key": "severity_level",
+                  "value": "medium",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_type",
+                  "value": "self",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_name",
+                  "value": "Rachmat Hidayat",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_position",
+                  "value": "mahasiswa",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_position_description",
+                  "value": "Mahasiswa Teknik Mesin",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_gender",
+                  "value": "male",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_age",
+                  "value": "22",
+                  "type": "text"
+                },
+                {
+                  "key": "witness_name",
+                  "value": "Abdul Muhyi",
+                  "type": "text"
+                },
+                {
+                  "key": "ppe_used",
+                  "value": "Tidak ada",
+                  "type": "text"
+                },
+                {
+                  "key": "chronology",
+                  "value": "Pelapor terpeleset karena lantai licin setelah kegiatan praktik di area workshop.",
+                  "type": "text"
+                },
+                {
+                  "key": "cause",
+                  "value": "Lantai licin",
+                  "type": "text"
+                },
+                {
+                  "key": "initial_action",
+                  "value": "Area diberi tanda peringatan dan korban dibantu ke tempat aman.",
+                  "type": "text"
+                },
+                {
+                  "key": "impact",
+                  "value": "Korban mengalami memar ringan dan aktivitas dihentikan sementara.",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_conditions[]",
+                  "value": "area_kerja_berbahaya",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_actions[]",
+                  "value": "penggunaan_alat_tidak_aman",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_condition_cause",
+                  "value": "Area belum diberi pembatas yang memadai.",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_action_cause",
+                  "value": "Instruksi kerja belum dikomunikasikan dengan jelas.",
+                  "type": "text"
+                },
+                {
+                  "key": "warning_given_before_incident",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_previously_occurred",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "proposed_preventions[]",
+                  "value": "pengamanan_sumber_bahaya",
+                  "type": "text"
+                },
+                {
+                  "key": "prevention_action_plan",
+                  "value": "Pasang pembatas dan lakukan inspeksi rutin.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Cek status insiden",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Cek status insiden', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cek status insiden dengan query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Cek status insiden dengan query', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents/status?q={{incident_report_number}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents",
+                "status?q={{incident_report_number}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail insiden publik aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Detail insiden publik aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents/{{incident_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents",
+                "{{incident_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Akses daftar insiden publik dialihkan login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Akses daftar insiden publik dialihkan login', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/incidents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "incidents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Akses daftar hazard publik dialihkan login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Akses daftar hazard publik dialihkan login', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/hazard-reports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "hazard-reports"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Ambil CSRF login admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Ambil CSRF login admin', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login admin', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "login",
+                  "value": "admin@k3l.local",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "remember",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Dashboard admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Dashboard admin', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Daftar user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar user', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form tambah user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form tambah user', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah user', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "role_id",
+                  "value": "{{role_mahasiswa_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "User Test {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "user.test.{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "user.test.{{$timestamp}}@example.test",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "081234567800",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Form edit user aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form edit user aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{user_id}}/edit",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{user_id}}",
+                "edit"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Daftar lokasi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar lokasi', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/locations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "locations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form tambah lokasi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form tambah lokasi', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/locations/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "locations",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah lokasi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah lokasi', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/locations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "locations"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Lokasi Test {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "LOC-{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Lokasi untuk pengujian sistem.",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar kategori insiden",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar kategori insiden', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/incident-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "incident-categories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form tambah kategori insiden",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form tambah kategori insiden', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/incident-categories/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "incident-categories",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah kategori insiden",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah kategori insiden', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/incident-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "incident-categories"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Kategori Test {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Kategori untuk pengujian sistem.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar ruangan gedung",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar ruangan gedung', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/campus-rooms",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "campus-rooms"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form tambah ruangan gedung",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form tambah ruangan gedung', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/campus-rooms/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "campus-rooms",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Daftar denah gedung",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar denah gedung', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}",
+                  "",
+                  "",
+                  "",
+                  "var responseBody = pm.response.text();",
+                  "pm.test('Memuat teks: Denah per Gedung dan Lantai', () => pm.expect(responseBody).to.include('Denah per Gedung dan Lantai'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/floorplans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "floorplans"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form buat denah gedung",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form buat denah gedung', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/floorplans/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "floorplans",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Preview denah gedung aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Preview denah gedung aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/floorplans/{{floorplan_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "floorplans",
+                "{{floorplan_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit denah gedung aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Edit denah gedung aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/floorplans/{{floorplan_id}}/edit",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "floorplans",
+                "{{floorplan_id}}",
+                "edit"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Generate denah gedung aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Generate denah gedung aman', () => {",
+                  "  pm.expect([200,302,422]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/floorplans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "floorplans"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Denah Newman {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "location_id",
+                  "value": "{{location_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "building_key",
+                  "value": "gedung-teori",
+                  "type": "text"
+                },
+                {
+                  "key": "floor",
+                  "value": "9",
+                  "type": "text"
+                },
+                {
+                  "key": "version",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "canvas_width",
+                  "value": "420",
+                  "type": "text"
+                },
+                {
+                  "key": "canvas_height",
+                  "value": "260",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][campus_room_id]",
+                  "value": "{{campus_room_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][shape_type]",
+                  "value": "rect",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][coordinates]",
+                  "value": "{\"x\":40,\"y\":40,\"width\":160,\"height\":90}",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][label]",
+                  "value": "Ruang Newman",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][default_fill_color]",
+                  "value": "#e5e7eb",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][incident_fill_color]",
+                  "value": "#ef4444",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][hazard_fill_color]",
+                  "value": "#f59e0b",
+                  "type": "text"
+                },
+                {
+                  "key": "rooms[0][sort_order]",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Monitoring hazard admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Monitoring hazard admin', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/hazards",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "hazards"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail hazard monitoring aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Detail hazard monitoring aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/hazards/{{hazard_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "hazards",
+                "{{hazard_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Daftar kategori knowledge",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar kategori knowledge', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-categories"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form tambah kategori knowledge",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form tambah kategori knowledge', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-categories/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-categories",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah kategori knowledge",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah kategori knowledge', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-categories"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Knowledge Test {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "slug",
+                  "value": "knowledge-test-{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Kategori knowledge untuk pengujian.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar artikel knowledge admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar artikel knowledge admin', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-articles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-articles"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form artikel knowledge admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form artikel knowledge admin', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-articles/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-articles",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah artikel knowledge admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah artikel knowledge admin', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/knowledge-articles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "knowledge-articles"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "knowledge_category_id",
+                  "value": "{{knowledge_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Artikel Admin {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "slug",
+                  "value": "artikel-admin-{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "summary",
+                  "value": "Panduan singkat dari admin.",
+                  "type": "text"
+                },
+                {
+                  "key": "reading_time",
+                  "value": "5 menit",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "published",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][title]",
+                  "value": "Materi",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][body]",
+                  "value": "Isi materi admin untuk pengujian.",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][list_style]",
+                  "value": "paragraph",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][media_type]",
+                  "value": "none",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar kontak darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar kontak darurat', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-contacts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-contacts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form kontak darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form kontak darurat', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-contacts/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-contacts",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah kontak darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah kontak darurat', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-contacts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-contacts"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Pos Keamanan {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "phone_number",
+                  "value": "081234567000",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Kontak keamanan kampus 24 jam.",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "value": "phone",
+                  "type": "text"
+                },
+                {
+                  "key": "color_class",
+                  "value": "bg-red-500",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar langkah tanggap darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar langkah tanggap darurat', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-response-steps",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-response-steps"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form langkah tanggap darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form langkah tanggap darurat', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-response-steps/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-response-steps",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah langkah tanggap darurat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah langkah tanggap darurat', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/emergency-response-steps",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "emergency-response-steps"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Amankan Area {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Jauhkan orang dari sumber bahaya dan beri tanda peringatan.",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar first aid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar first aid', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/first-aid-guides",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "first-aid-guides"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form first aid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form first aid', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/first-aid-guides/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "first-aid-guides",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah first aid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah first aid', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/first-aid-guides",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "first-aid-guides"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Luka Ringan {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "value": "bandage",
+                  "type": "text"
+                },
+                {
+                  "key": "accent_class",
+                  "value": "bg-green-500",
+                  "type": "text"
+                },
+                {
+                  "key": "summary",
+                  "value": "Panduan penanganan luka ringan.",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "actions_text",
+                  "value": "Bersihkan luka dengan air mengalir.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Logout admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Logout admin', () => {",
+                  "  pm.expect([200,302,405]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Satgas",
+      "item": [
+        {
+          "name": "Ambil CSRF login satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Ambil CSRF login satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login satgas', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "login",
+                  "value": "satgas@k3l.local",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "remember",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Dashboard satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Dashboard satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Profil satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Profil satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update profil satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Update profil satgas', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "profile"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Satgas K3L",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "satgas.k3l",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "satgas@k3l.local",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "081234567891",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar insiden satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar insiden satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form insiden satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form insiden satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit insiden satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Submit insiden satgas', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}",
+                  "",
+                  "",
+                  "",
+                  "const locationHeader = pm.response.headers.get('Location') || '';",
+                  "const idMatch = locationHeader.match(/\\/satgas\\/incidents\\/(\\d+)/);",
+                  "if (idMatch) {",
+                  "  pm.environment.set('incident_id', idMatch[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Insiden Satgas {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_category_id",
+                  "value": "{{incident_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "injury_category_id",
+                  "value": "{{injury_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "body_part_id",
+                  "value": "{{body_part_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "location_id",
+                  "value": "{{location_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_date",
+                  "value": "2026-05-01",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_time",
+                  "value": "11:00",
+                  "type": "text"
+                },
+                {
+                  "key": "severity_level",
+                  "value": "low",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_type",
+                  "value": "self",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_name",
+                  "value": "Satgas Tester",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_position",
+                  "value": "karyawan",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_position_description",
+                  "value": "Petugas Satgas K3L",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_gender",
+                  "value": "male",
+                  "type": "text"
+                },
+                {
+                  "key": "victim_age",
+                  "value": "30",
+                  "type": "text"
+                },
+                {
+                  "key": "witness_name",
+                  "value": "Petugas Workshop",
+                  "type": "text"
+                },
+                {
+                  "key": "ppe_used",
+                  "value": "Safety shoes dan rompi",
+                  "type": "text"
+                },
+                {
+                  "key": "chronology",
+                  "value": "Laporan internal dibuat satgas untuk pengujian alur pelaporan insiden sistem.",
+                  "type": "text"
+                },
+                {
+                  "key": "cause",
+                  "value": "Pengujian",
+                  "type": "text"
+                },
+                {
+                  "key": "initial_action",
+                  "value": "Dicatat untuk validasi sistem.",
+                  "type": "text"
+                },
+                {
+                  "key": "impact",
+                  "value": "Tidak ada cedera.",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_conditions[]",
+                  "value": "area_kerja_berbahaya",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_actions[]",
+                  "value": "penggunaan_alat_tidak_aman",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_condition_cause",
+                  "value": "Area kerja memerlukan pengamanan tambahan.",
+                  "type": "text"
+                },
+                {
+                  "key": "unsafe_action_cause",
+                  "value": "Simulasi penggunaan alat tidak aman.",
+                  "type": "text"
+                },
+                {
+                  "key": "warning_given_before_incident",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "incident_previously_occurred",
+                  "value": "0",
+                  "type": "text"
+                },
+                {
+                  "key": "proposed_preventions[]",
+                  "value": "inspeksi_rutin",
+                  "type": "text"
+                },
+                {
+                  "key": "prevention_action_plan",
+                  "value": "Tambahkan checklist inspeksi rutin.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Detail insiden satgas aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Detail insiden satgas aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents/{{incident_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents",
+                "{{incident_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verifikasi insiden aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Verifikasi insiden aman', () => {",
+                  "  pm.expect([200,302,403,404,422]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents/{{incident_id}}/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents",
+                "{{incident_id}}",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "injury_category_id",
+                  "value": "{{injury_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "body_part_id",
+                  "value": "{{body_part_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "impact",
+                  "value": "Cedera ringan",
+                  "type": "text"
+                },
+                {
+                  "key": "verification_note",
+                  "value": "Laporan diverifikasi oleh satgas.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Update status insiden aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Update status insiden aman', () => {",
+                  "  pm.expect([200,302,403,404,422]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents/{{incident_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents",
+                "{{incident_id}}",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "investigating",
+                  "type": "text"
+                },
+                {
+                  "key": "status_note",
+                  "value": "Investigasi lapangan sedang dilakukan.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Tambah follow up insiden aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah follow up insiden aman', () => {",
+                  "  pm.expect([200,302,403,404,422]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/incidents/{{incident_id}}/follow-ups",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "incidents",
+                "{{incident_id}}",
+                "follow-ups"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "action_taken",
+                  "value": "Membersihkan area dan memasang tanda bahaya.",
+                  "type": "text"
+                },
+                {
+                  "key": "due_date",
+                  "value": "2026-05-07",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "in_progress",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar hazard satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar hazard satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form hazard satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form hazard satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit hazard satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Submit hazard satgas', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}",
+                  "",
+                  "",
+                  "",
+                  "const locationHeader = pm.response.headers.get('Location') || '';",
+                  "const idMatch = locationHeader.match(/\\/satgas\\/hazards\\/(\\d+)/);",
+                  "if (idMatch) {",
+                  "  pm.environment.set('hazard_id', idMatch[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Hazard Satgas {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "hazard_type",
+                  "value": "lingkungan",
+                  "type": "text"
+                },
+                {
+                  "key": "location_id",
+                  "value": "{{location_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "specific_location",
+                  "value": "Koridor workshop",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "-6.8774225",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "107.6207125",
+                  "type": "text"
+                },
+                {
+                  "key": "location_accuracy",
+                  "value": "12",
+                  "type": "text"
+                },
+                {
+                  "key": "notes",
+                  "value": "Area koridor perlu diberi tanda peringatan.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Peta hazard satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Peta hazard satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards/map",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards",
+                "map"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah titik peta hazard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah titik peta hazard', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards/map-points",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards",
+                "map-points"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Titik Bahaya {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "hazard_type",
+                  "value": "listrik",
+                  "type": "text"
+                },
+                {
+                  "key": "risk_level",
+                  "value": "sedang",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Titik pengujian pada peta.",
+                  "type": "text"
+                },
+                {
+                  "key": "map_source",
+                  "value": "satellite",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "-6.914744",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "107.609810",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Detail hazard satgas aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Detail hazard satgas aman', () => {",
+                  "  pm.expect([200,404]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards/{{hazard_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards",
+                "{{hazard_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update status hazard aman",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Update status hazard aman', () => {",
+                  "  pm.expect([200,302,404,422]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/hazards/{{hazard_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "hazards",
+                "{{hazard_id}}",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "reviewed",
+                  "type": "text"
+                },
+                {
+                  "key": "response_note",
+                  "value": "Temuan sudah dicek dan diteruskan ke petugas fasilitas.",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Daftar artikel knowledge satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Daftar artikel knowledge satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/knowledge-articles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "knowledge-articles"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Form artikel knowledge satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Form artikel knowledge satgas', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/knowledge-articles/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "knowledge-articles",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah artikel knowledge satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tambah artikel knowledge satgas', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/knowledge-articles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "knowledge-articles"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "knowledge_category_id",
+                  "value": "{{knowledge_category_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Artikel Satgas {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "slug",
+                  "value": "artikel-satgas-{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "summary",
+                  "value": "Panduan singkat dari satgas.",
+                  "type": "text"
+                },
+                {
+                  "key": "reading_time",
+                  "value": "5 menit",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "published",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][title]",
+                  "value": "Materi",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][body]",
+                  "value": "Isi materi satgas untuk pengujian.",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][list_style]",
+                  "value": "paragraph",
+                  "type": "text"
+                },
+                {
+                  "key": "sections[0][media_type]",
+                  "value": "none",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Logout satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Logout satgas', () => {",
+                  "  pm.expect([200,302,405]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hak Akses",
+      "item": [
+        {
+          "name": "Admin route tanpa login dialihkan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Admin route tanpa login dialihkan', () => {",
+                  "  pm.expect([200,302,401,403]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Satgas route tanpa login dialihkan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Satgas route tanpa login dialihkan', () => {",
+                  "  pm.expect([200,302,401,403]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ambil CSRF login mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Ambil CSRF login mahasiswa', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login mahasiswa', () => {",
+                  "  pm.expect([200,302]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "login",
+                  "value": "mahasiswa@k3l.local",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "remember",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        },
+        {
+          "name": "Mahasiswa tidak boleh akses admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Mahasiswa tidak boleh akses admin', () => {",
+                  "  pm.expect([401,403]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mahasiswa tidak boleh akses satgas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Mahasiswa tidak boleh akses satgas', () => {",
+                  "  pm.expect([401,403]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/satgas/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "satgas",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ambil CSRF dashboard mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Ambil CSRF dashboard mahasiswa', () => {",
+                  "  pm.expect([200]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Logout mahasiswa', () => {",
+                  "  pm.expect([200,302,405]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Tidak terjadi server error', () => {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "",
+                  "const body = pm.response.text();",
+                  "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (match) {",
+                  "  pm.environment.set('csrf_token', match[1]);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('Tidak terjadi server error', () => {",
+          "  pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "const body = pm.response.text();",
+          "const match = body.match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+          "if (match) {",
+          "  pm.environment.set('csrf_token', match[1]);",
+          "}"
+        ]
+      }
+    }
+  ]
+}

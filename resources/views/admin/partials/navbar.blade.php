@@ -56,6 +56,12 @@
                             Ruangan Gedung
                         </a>
 
+                        <a href="{{ route('admin.floorplans.index') }}"
+                            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-[var(--blue-low-opacity)] {{ request()->routeIs('admin.floorplans.*') ? 'bg-[var(--blue-low-opacity)] text-[var(--primary-color)]' : '' }}">
+                            <span class="material-symbols-outlined text-[var(--primary-color)]">architecture</span>
+                            Denah Gedung
+                        </a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
