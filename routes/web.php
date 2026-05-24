@@ -109,6 +109,7 @@ Route::middleware(['auth', 'active.user', 'role:satgas'])->prefix('satgas')->nam
         Route::post('/', [SatgasPotentialHazardReportController::class, 'store'])->name('store');
         Route::get('/map', [PotentialHazardReviewController::class, 'map'])->name('map');
         Route::post('/map-points', [PotentialHazardReviewController::class, 'storeMapPoint'])->name('map-points.store');
+        Route::get('/map/export', [PotentialHazardReviewController::class, 'exportMap'])->name('map.export');
         Route::get('/', [PotentialHazardReviewController::class, 'index'])->name('index');
         Route::get('/{potentialHazardReport}', [PotentialHazardReviewController::class, 'show'])->name('show');
         Route::patch('/{potentialHazardReport}/pinpoint', [PotentialHazardReviewController::class, 'updatePinpoint'])->name('update-pinpoint');

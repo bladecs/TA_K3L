@@ -859,6 +859,18 @@
                 }
             };
 
+            const setLocationLocked = (locked) => {
+                if (!locationSelect) {
+                    return;
+                }
+
+                locationSelect.disabled = locked;
+                locationSelect.classList.toggle('opacity-60', locked);
+                locationSelect.classList.toggle('cursor-not-allowed', locked);
+                locationSelect.classList.toggle('bg-slate-100', locked);
+                locationSelect.classList.toggle('bg-white', !locked);
+            };
+
             const selectLocationByName = (name) => {
                 if (!locationSelect) {
                     return false;
@@ -946,6 +958,7 @@
                 if (normalizedLocation === normalize('Diluar Polman')) {
                     resetRoomSelection(true, 'Lokasi berada di luar Polman, sehingga lantai dan ruangan tidak dapat dipilih.');
                     showSpecificLocation('Diluar Polman', true);
+                    setLocationLocked(true);
                     return;
                 }
 
@@ -954,10 +967,12 @@
                 if (!building) {
                     resetRoomSelection(true, 'Data lantai dan ruangan belum tersedia untuk lokasi ini.');
                     showSpecificLocation(locationName, false);
+                    setLocationLocked(false);
                     return;
                 }
 
                 showSpecificLocation(building.name, false);
+                setLocationLocked(false);
                 fillRooms(building.key, useOldValues ? oldFloor : null, useOldValues ? oldRoomId : null);
             };
 
@@ -988,6 +1003,7 @@
 
                 if (detected) {
                     const isSelected = selectLocationByName(detected.name);
+                    setLocationLocked(false);
                     showSpecificLocation(detected.name, false);
                     fillRooms(detected.key, oldFloor, oldRoomId);
 
@@ -1000,6 +1016,7 @@
                 const isOutsideSelected = selectLocationByName('Diluar Polman');
                 resetRoomSelection(true, 'Lokasi berada di luar Polman, sehingga lantai dan ruangan tidak dapat dipilih.');
                 showSpecificLocation('Diluar Polman', true);
+                setLocationLocked(true);
                 status.textContent = isOutsideSelected
                     ? 'Koordinat berada di luar polygon Polman. Lokasi kejadian terisi Diluar Polman.'
                     : 'Koordinat berada di luar polygon Polman, tetapi lokasi Diluar Polman belum ada di master lokasi.';

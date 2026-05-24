@@ -52,18 +52,5 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ],
         );
-
-        User::query()->updateOrCreate(
-            ['email' => 'mahasiswa@k3l.local'],
-            [
-                'role_id' => $roles['mahasiswa']->id ?? null,
-                'name' => 'Mahasiswa K3L',
-                'username' => 'mhs.k3l',
-                'phone' => '081234567892',
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'),
-                'is_active' => true,
-            ],
-        );
     }
 }

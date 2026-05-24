@@ -6,67 +6,7 @@
 @section('hero_description', 'Pantau semua hazard yang sudah diberi koordinat oleh Satgas pada citra satelit Kampus Polman Bandung.')
 
 @php
-    $campusBuildingPolygons = [
-        [
-            'key' => 'gedung-teori',
-            'name' => 'Gedung Teori & Kantor',
-            'color' => '#2563eb',
-            'default_floor' => 2,
-            'floors' => [2, 3],
-            'coordinates' => [
-                [-6.87732, 107.62028],
-                [-6.87733, 107.62114],
-                [-6.87753, 107.62114],
-                [-6.87751, 107.62029],
-            ],
-        ],
-        [
-            'key' => 'gedung-kantor',
-            'name' => 'Gedung Kantor',
-            'color' => '#dc2626',
-            'coordinates' => [
-                [-6.87717, 107.61987],
-                [-6.87717, 107.62008],
-                [-6.87733, 107.62007],
-                [-6.87734, 107.62012],
-                [-6.87752, 107.62011],
-                [-6.87753, 107.61984],
-            ],
-        ],
-        [
-            'key' => 'gedung-mekanik',
-            'name' => 'Gedung Mekanik',
-            'color' => '#16a34a',
-            'coordinates' => [
-                [-6.87702, 107.62026],
-                [-6.87704, 107.62118],
-                [-6.87728, 107.62117],
-                [-6.87726, 107.62024],
-            ],
-        ],
-        [
-            'key' => 'gedung-fe',
-            'name' => 'Gedung FE',
-            'color' => '#9333ea',
-            'coordinates' => [
-                [-6.87639, 107.62084],
-                [-6.87639, 107.62127],
-                [-6.87694, 107.62127],
-                [-6.87694, 107.62084],
-            ],
-        ],
-        [
-            'key' => 'gedung-grc',
-            'name' => 'Gedung GRC',
-            'color' => '#f59e0b',
-            'coordinates' => [
-                [-6.87675, 107.62039],
-                [-6.87676, 107.62078],
-                [-6.87693, 107.62077],
-                [-6.87693, 107.62038],
-            ],
-        ],
-    ];
+    $campusBuildingPolygons = $campusBuildingPolygons ?? [];
 @endphp
 
 @push('styles')
@@ -92,6 +32,100 @@
                 </a>
             </article>
         </div>
+
+        @php $filterQuery = collect($filters ?? [])->filter(fn($value) => filled($value))->all(); @endphp
+
+        <form action="{{ route('satgas.hazards.map') }}" method="GET" class="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-200 lg:p-6">
+            <div class="grid gap-4 lg:grid-cols-4">
+                <label class="block lg:col-span-2">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nama / Laporan</span>
+                    <input name="q" type="search" value="{{ $filters['q'] ?? '' }}" placeholder="Cari pelapor, judul, atau nomor laporan"
+                        class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Dari Tanggal</span>
+                    <input name="date_from" type="date" value="{{ $filters['date_from'] ?? '' }}"
+                        class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sampai Tanggal</span>
+                    <input name="date_to" type="date" value="{{ $filters['date_to'] ?? '' }}"
+                        class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Bulan</span>
+                    <select name="month" class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                        <option value="">Semua Bulan</option>
+                        @foreach (range(1, 12) as $month)
+                            <option value="{{ $month }}" @selected((string) ($filters['month'] ?? '') === (string) $month)>{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                        @endforeach
+                    </select>
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Tahun</span>
+                    <input name="year" type="number" min="2020" max="2100" value="{{ $filters['year'] ?? '' }}" placeholder="2026"
+                        class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Area</span>
+                    <select name="scope" class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                        <option value="">Semua Area</option>
+                        <option value="inside" @selected(($filters['scope'] ?? '') === 'inside')>Di Dalam Polman</option>
+                        <option value="outside" @selected(($filters['scope'] ?? '') === 'outside')>Diluar Polman</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Lokasi</span>
+                    <select name="location_id" class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                        <option value="">Semua Lokasi</option>
+                        @foreach ($locations as $location)
+                            <option value="{{ $location->id }}" @selected((string) ($filters['location_id'] ?? '') === (string) $location->id)>{{ $location->name }}</option>
+                        @endforeach
+                    </select>
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Kategori</span>
+                    <select name="hazard_type" class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                        <option value="">Semua Kategori</option>
+                        <option value="lingkungan" @selected(($filters['hazard_type'] ?? '') === 'lingkungan')>Lingkungan</option>
+                        <option value="peralatan" @selected(($filters['hazard_type'] ?? '') === 'peralatan')>Peralatan</option>
+                        <option value="listrik" @selected(($filters['hazard_type'] ?? '') === 'listrik')>Listrik</option>
+                        <option value="zat-kimia" @selected(($filters['hazard_type'] ?? '') === 'zat-kimia')>Zat Kimia</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Risk Level</span>
+                    <select name="risk_level" class="mt-2 h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-[var(--primary-color)] focus:bg-white">
+                        <option value="">Semua Level</option>
+                        @foreach (['rendah' => 'Rendah', 'sedang' => 'Sedang', 'tinggi' => 'Tinggi', 'kritis' => 'Kritis'] as $value => $label)
+                            <option value="{{ $value }}" @selected(($filters['risk_level'] ?? '') === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </label>
+            </div>
+
+            <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--primary-color)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--primary-deep)]">
+                    <span class="material-symbols-outlined text-[20px]">filter_alt</span>
+                    Terapkan Filter
+                </button>
+                <a href="{{ route('satgas.hazards.map') }}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50">
+                    Reset
+                </a>
+                <a href="{{ route('satgas.hazards.map.export', $filterQuery) }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-700">
+                    <span class="material-symbols-outlined text-[20px]">download</span>
+                    Export Excel
+                </a>
+            </div>
+        </form>
 
         <form action="{{ route('satgas.hazards.map-points.store') }}" method="POST"
             class="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-200 lg:p-6">
@@ -196,6 +230,76 @@
 
         <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200">
             <div id="satgas-hazard-map" class="h-[76vh] min-h-[620px] w-full"></div>
+        </div>
+
+        <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200">
+            <div class="flex flex-col gap-2 border-b border-slate-200 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Tabel Hazard</p>
+                    <h2 class="mt-1 text-2xl font-bold text-slate-900">Data hazard terkoordinat</h2>
+                </div>
+                <p class="text-sm font-semibold text-slate-500">{{ $reports->total() ?? 0 }} data sesuai filter</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-sm">
+                    <thead class="bg-slate-50 text-left text-slate-600">
+                        <tr>
+                            <th class="px-5 py-4 font-semibold">Tanggal</th>
+                            <th class="px-5 py-4 font-semibold">No. Laporan</th>
+                            <th class="px-5 py-4 font-semibold">Nama</th>
+                            <th class="px-5 py-4 font-semibold">Hazard</th>
+                            <th class="px-5 py-4 font-semibold">Lokasi</th>
+                            <th class="px-5 py-4 font-semibold">Area</th>
+                            <th class="px-5 py-4 font-semibold">Koordinat</th>
+                            <th class="px-5 py-4 font-semibold">Risk</th>
+                            <th class="px-5 py-4 font-semibold">Status</th>
+                            <th class="px-5 py-4 font-semibold">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @forelse ($reports as $report)
+                            @php
+                                $locationName = $report->location?->name ?? '-';
+                                $lat = $report->latitude ?? '-';
+                                $lng = $report->longitude ?? '-';
+                            @endphp
+                            <tr>
+                                <td class="px-5 py-4 text-slate-700">{{ optional($report->submitted_at)->format('d M Y') }}</td>
+                                <td class="px-5 py-4 font-medium text-slate-900">{{ $report->report_number }}</td>
+                                <td class="px-5 py-4 text-slate-700">{{ $report->reporter?->name ?? $report->reporter_name ?? '-' }}</td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    <p class="font-semibold text-slate-900">{{ $report->title }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $report->hazard_type ? str_replace('-', ' ', $report->hazard_type) : '-' }}</p>
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    <p>{{ $locationName }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $report->specific_location ?? '-' }}</p>
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">{{ $locationName === 'Diluar Polman' ? 'Diluar Polman' : 'Di Dalam Polman' }}</td>
+                                <td class="px-5 py-4 text-slate-700">{{ $lat }}, {{ $lng }}</td>
+                                <td class="px-5 py-4 text-slate-700">{{ $report->risk_level ?? '-' }}</td>
+                                <td class="px-5 py-4">
+                                    <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-slate-100 text-slate-700">
+                                        {{ str_replace('_', ' ', $report->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-5 py-4">
+                                    <a href="{{ route('satgas.hazards.show', $report) }}" class="font-semibold text-[var(--primary-color)] hover:text-[var(--primary-deep)]">Detail</a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="10" class="px-6 py-10 text-center text-slate-500">Belum ada data hazard berkoordinat sesuai filter.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="border-t border-slate-200 px-6 py-4">
+                {{ $reports->links() }}
+            </div>
         </div>
 
         <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200">
